@@ -1,0 +1,48 @@
+.dao
+	.LabelDAO
+		#save
+		#update
+		#delete
+		#getById
+		#getByEntityId
+	.EntityDAO
+		#save
+		#update
+		#setLabel
+		#addLabel
+		#removeLabel
+		#delete
+		#getById
+		#getByForeignKey
+	.SystemDAO
+		#save
+		#update
+		#getById
+		#getAll
+		#getByName
+	.ModuleDAO
+		#save
+		#update
+		#getById
+		#getAll
+		#getByName
+	.OperationDAO
+		#save
+		#update
+		#getById
+		#getByName
+	.Rule
+		#save
+		#update
+		#getById
+		#getByOperationId//可以设置排序规则
+.model
+.manager
+	.LabelManager
+		#createLabel
+		#changeLabel
+		#deleteLabel
+		#findLabelByName
+		
+		......
+		剩余上面写完再弄
