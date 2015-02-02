@@ -1,11 +1,11 @@
-.dao
+﻿.dao
 	.LabelDAO			- xiao
 		#save
 		#update
 		#delete
 		#getById
 		#getByEntityId
-	.EntityDAO
+	.EntityDAO			- xie
 		#save
 		#update
 		#setLabel
