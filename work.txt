@@ -11,6 +11,7 @@
 		#setLabel
 		#addLabel
 		#removeLabel
+		#deleteLabel
 		#delete
 		#getById
 		#getByForeignKey
