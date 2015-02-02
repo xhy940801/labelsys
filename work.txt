@@ -5,12 +5,13 @@
 		#delete
 		#getById
 		#getByEntityId
-	.EntityDAO			- xie
+	.EntityDAO			+ xie
 		#save
 		#update
 		#setLabel
 		#addLabel
 		#removeLabel
+		#deleteLabel
 		#delete
 		#getById
 		#getByForeignKey
@@ -20,13 +21,13 @@
 		#getById
 		#getAll
 		#getByName
-	.ModuleDAO
+	.ModuleDAO			+ xie
 		#save
 		#update
 		#getById
 		#getAll
 		#getByName
-	.OperationDAO
+	.OperationDAO			+ xie
 		#save
 		#update
 		#getById
