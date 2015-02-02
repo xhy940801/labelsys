@@ -1,6 +1,4 @@
 package net._100steps.labelsys.service.model;
-
-import com.sun.javafx.sg.prism.NGShape.Mode;
 // Generated 2015-2-1 23:54:58 by Hibernate Tools 3.4.0.CR1
 
 /**

@@ -11,23 +11,9 @@
 	http://www.springframework.org/schema/aop
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<bean id="groupDAO"
-		class="net._100steps.bbter.service.dao.group.hibernateimpl.GroupDAOHibernateImpl">
+	<bean id="labelDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.LabelDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-	
-	<bean id="departmentDAO"
-		class="net._100steps.bbter.service.dao.department.hibernateimpl.DepartmentDAOHibernateImpl">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-	<bean id="userDAO"
-		class="net._100steps.bbter.service.dao.user.hibernateimpl.UserDAOHibernateImpl">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-	<bean id="userDetailDAO"
-		class="net._100steps.bbter.service.dao.user.hibernateimpl.UserDetailDAOHibernateImpl">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-	
 
 </beans>
