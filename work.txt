@@ -1,20 +1,21 @@
-.dao
-	.LabelDAO
+﻿.dao
+	.LabelDAO			+ xiao
 		#save
 		#update
 		#delete
 		#getById
 		#getByEntityId
-	.EntityDAO
+	.EntityDAO			- xie
 		#save
 		#update
 		#setLabel
 		#addLabel
 		#removeLabel
+		#deleteLabel
 		#delete
 		#getById
 		#getByForeignKey
-	.SystemDAO
+	.SystemDAO			- xiao
 		#save
 		#update
 		#getById
@@ -36,7 +37,7 @@
 		#update
 		#getById
 		#getByOperationId//可以设置排序规则
-.model
+.model					+ xiao
 .manager
 	.LabelManager
 		#createLabel
