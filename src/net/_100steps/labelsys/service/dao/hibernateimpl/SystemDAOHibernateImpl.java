@@ -18,8 +18,7 @@ import com.xiao.util.quickcache.QuickCache;
 public class SystemDAOHibernateImpl implements SystemDAO
 {
 	private SessionFactory sessionFactory;
-	private QuickCache<Integer, System> cacheById;
-	private QuickCache<String, System> cacheByName;
+	private QuickCache<Object, System> cache;
 	private SoftReference<List<System>> refSystems;
 
 	@Override
@@ -41,18 +40,7 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	@Transactional
 	public void update(System system)
 	{
-		System cacheSys = cacheById.get(system.getId());
-		if(cacheSys != null)
-		{
-			cacheById.remove(cacheSys.getId());
-			cacheByName.remove(cacheSys.getName());
-		}
-		cacheSys = cacheByName.get(system.getName());
-		if(cacheSys != null)
-		{
-			cacheById.remove(cacheSys.getId());
-			cacheByName.remove(cacheSys.getName());
-		}
+		cache.remove(system.getId());
 		refSystems = null;
 		try
 		{
@@ -70,21 +58,48 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	{
 		try
 		{
-			return cacheById.get(id, (key)->{return (System) sessionFactory.getCurrentSession().get(System.class, key);});
+			return cache.get(
+					id,
+					(key) ->
+					{
+						return (System) sessionFactory.getCurrentSession()
+								.get(System.class, (Integer) key);
+					},
+					(value)->
+					{
+						Object[] os = new Object[2];
+						os[0] = value.getId();
+						os[1] = value.getName();
+						return os;
+					});
 		}
 		catch (HibernateException e)
 		{
 			throw new DAOException(e);
 		}
 	}
-
+	
 	@Override
 	@Transactional
 	public System getByName(String name)
 	{
 		try
 		{
-			return cacheByName.get(name, (key)->{return (System) sessionFactory.getCurrentSession().createQuery("from System as s where s.name=?").setString(0, key).uniqueResult();});
+			return cache.get(
+					name,
+					(key) ->
+					{
+						return (System) sessionFactory.getCurrentSession()
+								.createQuery("from System as s where s.name=?")
+								.setString(0, (String) key).uniqueResult();
+					},
+					(value)->
+					{
+						Object[] os = new Object[2];
+						os[0] = value.getId();
+						os[1] = value.getName();
+						return os;
+					});
 		}
 		catch (HibernateException e)
 		{
@@ -117,14 +132,9 @@ public class SystemDAOHibernateImpl implements SystemDAO
 		this.sessionFactory = sessionFactory;
 	}
 
-	public void setCacheById(QuickCache<Integer, System> cacheById)
+	public void setCacheById(QuickCache<Object, System> cache)
 	{
-		this.cacheById = cacheById;
-	}
-	
-	public void setCacheByName(QuickCache<String, System> cacheByName)
-	{
-		this.cacheByName = cacheByName;
+		this.cache = cache;
 	}
 
 }

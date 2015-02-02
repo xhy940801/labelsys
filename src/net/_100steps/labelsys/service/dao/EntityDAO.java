@@ -74,5 +74,5 @@ public interface EntityDAO {
 	 * @return
 	 * @author XT1024
 	 */
-	public List<Entity> getByForeignKey(int foreignKey);
+	public Entity getByForeignKey(int moduleId, int foreignKey);
 }

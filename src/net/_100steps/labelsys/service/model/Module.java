@@ -13,7 +13,7 @@ public class Module
 {
 
 	private int id;
-	private int system_id;
+	private int systemId;
 	private String name;
 
 	public Module()
@@ -44,14 +44,14 @@ public class Module
 	}
 
 	@Column(name="system_id")
-	public int getSystem_id()
+	public int getSystemId()
 	{
-		return system_id;
+		return systemId;
 	}
 
-	public void setSystem_id(int system_id)
+	public void setSystemId(int systemId)
 	{
-		this.system_id = system_id;
+		this.systemId = systemId;
 	}
 
 	@Column
