@@ -8,7 +8,7 @@ public interface LabelDAO
 {
 	/**
 	 * 保存label
-	 * @param label 要保存的实体, 保存后的id会被写回到label中
+	 * @param label 要保存的实体,保存后的id会被写回到label中
 	 * @throws DAOException 当操作失败时抛出异常
 	 */
 	public void save(Label label);
