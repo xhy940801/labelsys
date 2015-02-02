@@ -18,6 +18,7 @@ public class Entity
 
 	public Entity()
 	{
+		
 	}
 
 	public Entity(int systemId, int moduleId, int foreignKey)
