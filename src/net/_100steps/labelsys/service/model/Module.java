@@ -13,6 +13,7 @@ public class Module
 {
 
 	private int id;
+	private int system_id;
 	private String name;
 
 	public Module()
@@ -41,6 +42,17 @@ public class Module
 	public void setId(int id)
 	{
 		this.id = id;
+	}
+
+	@Column(name="system_id")
+	public int getSystem_id()
+	{
+		return system_id;
+	}
+
+	public void setSystem_id(int system_id)
+	{
+		this.system_id = system_id;
 	}
 
 	@Column

@@ -13,7 +13,6 @@ public class Operation
 {
 
 	private int id;
-	private int systemId;
 	private int moduleId;
 	private String name;
 
@@ -22,9 +21,8 @@ public class Operation
 		
 	}
 
-	public Operation(int systemId, int moduleId, String name)
+	public Operation(int moduleId, String name)
 	{
-		this.systemId = systemId;
 		this.moduleId = moduleId;
 		this.name = name;
 	}
@@ -32,7 +30,6 @@ public class Operation
 	public Operation(Operation operation)
 	{
 		this.id = operation.id;
-		this.systemId = operation.systemId;
 		this.moduleId = operation.moduleId;
 		this.name = operation.name;
 	}
@@ -47,17 +44,6 @@ public class Operation
 	public void setId(int id)
 	{
 		this.id = id;
-	}
-
-	@Column(name="system_id")
-	public int getSystemId()
-	{
-		return this.systemId;
-	}
-
-	public void setSystemId(int systemId)
-	{
-		this.systemId = systemId;
 	}
 
 	@Column(name="module_id")
