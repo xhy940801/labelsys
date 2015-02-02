@@ -32,7 +32,7 @@
 		#update
 		#getById
 		#getByName
-	.Rule
+	.Rule				- xiao
 		#save
 		#update
 		#getById
