@@ -1,5 +1,5 @@
 ﻿.dao
-	.LabelDAO			- xiao
+	.LabelDAO			+ xiao
 		#save
 		#update
 		#delete
@@ -15,7 +15,7 @@
 		#delete
 		#getById
 		#getByForeignKey
-	.SystemDAO
+	.SystemDAO			- xiao
 		#save
 		#update
 		#getById
@@ -37,7 +37,7 @@
 		#update
 		#getById
 		#getByOperationId//可以设置排序规则
-.model
+.model					+ xiao
 .manager
 	.LabelManager
 		#createLabel
