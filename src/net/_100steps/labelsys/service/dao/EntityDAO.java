@@ -3,9 +3,6 @@ package net._100steps.labelsys.service.dao;
 import java.util.List;
 
 import net._100steps.labelsys.service.model.Entity;
-import net._100steps.labelsys.service.model.Label;
-
-import org.hibernate.SessionFactory;
 
 public interface EntityDAO {
 	
