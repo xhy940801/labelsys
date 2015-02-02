@@ -62,11 +62,27 @@ public class RuleDAOHibernateImpl implements RuleDAO
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Rule> getByOperationId(int id)
+	public List<Rule> getByOperationId(int id, final Order order)
 	{
 		try
 		{
-			return cacheByOperationId.get(id, (key)->{return sessionFactory.getCurrentSession().createQuery("from Rule as r where r.operationId=?").list();});
+			return cacheByOperationId.get(
+					id,
+					(key)->
+					{
+						switch (order)
+						{
+						case CREATEDASC:
+							return sessionFactory.getCurrentSession()
+									.createQuery("from Rule as r where r.operationId=? order by r.created asc").setInteger(0, key).list();
+						case CREATEDDESC:
+							return sessionFactory.getCurrentSession()
+									.createQuery("from Rule as r where r.operationId=? order by r.created desc").setInteger(0, key).list();
+						default:
+							return sessionFactory.getCurrentSession()
+									.createQuery("from Rule as r where r.operationId=?").setInteger(0, key).list();
+						}
+					});
 		}
 		catch (HibernateException e)
 		{

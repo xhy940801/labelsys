@@ -6,6 +6,10 @@ import net._100steps.labelsys.service.model.Rule;
 
 public interface RuleDAO
 {
+	static public enum Order
+	{
+		CREATEDASC, CREATEDDESC
+	}
 	/**
 	 * 新增规则
 	 * @param rule 规则,新增的记录的id会被写回rule
@@ -28,7 +32,8 @@ public interface RuleDAO
 	/**
 	 * 通过操作id获取规则列表
 	 * @param id 操作id
+	 * @param order 顺序
 	 * @return
 	 */
-	public List<Rule> getByOperationId(int id);
+	public List<Rule> getByOperationId(int id, Order order);
 }
