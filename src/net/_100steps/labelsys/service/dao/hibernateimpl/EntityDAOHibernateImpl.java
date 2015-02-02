@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.EntityDAO;
 import net._100steps.labelsys.service.model.Entity;
-import net._100steps.labelsys.service.model.Label;
 
 public class EntityDAOHibernateImpl implements EntityDAO{
 	private SessionFactory sessionFactory;
