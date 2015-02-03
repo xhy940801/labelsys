@@ -10,7 +10,9 @@ import net._100steps.labelsys.service.model.Label;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-
+/**
+ * @author xiao
+ */
 public class LabelDAOHibernateImpl implements LabelDAO
 {
 	private SessionFactory sessionFactory;
@@ -85,6 +87,34 @@ public class LabelDAOHibernateImpl implements LabelDAO
 		{
 			throw new DAOException(e);
 		}
+	}
+	
+	@Override
+	@Transactional
+	public Label getByName(int moduleId, String name)
+	{
+		try
+		{
+			return (Label) sessionFactory.getCurrentSession()
+					.createQuery("from Label as l where l.moduleId=? and l.name=?")
+					.setInteger(0, moduleId).setString(1, name)
+					.uniqueResult();
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Label> findByName(int moduleId, String name)
+	{
+		return (List<Label>) sessionFactory.getCurrentSession()
+				.createQuery("from Label as l where l.moduleId=? and l.name like %?%")
+				.setInteger(0, moduleId).setString(1, name)
+				.list();
 	}
 	
 	public void setSessionFactory(SessionFactory sessionFactory)

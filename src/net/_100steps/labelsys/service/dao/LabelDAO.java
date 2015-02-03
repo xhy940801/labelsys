@@ -35,6 +35,22 @@ public interface LabelDAO
 	public Label getById(int id);
 	
 	/**
+	 * 通过名称获取记录
+	 * @param moduleId 要获取的记录的模块名
+	 * @param name 名字
+	 * @return 如果找到,则返回实体,如果没找到,则返回null
+	 */
+	public Label getByName(int moduleId, String name);
+	
+	/**
+	 * 通过名称获取记录
+	 * @param moduleId 要获取的记录的模块名
+	 * @param name 名字
+	 * @return 如果找到,则返回实体,如果没找到list,则返回null
+	 */
+	public List<Label> findByName(int moduleId, String name);
+	
+	/**
 	 * 获取实体所拥有的所有标签
 	 * @param id 实体的id
 	 * @return 标签列表

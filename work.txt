@@ -32,18 +32,41 @@
 		#update
 		#getById
 		#getByName
-	.Rule				+ xiao
+	.RuleDAO			+ xiao
 		#save
 		#update
 		#getById
 		#getByOperationId//可以设置排序规则
 .model					+ xiao
 .manager
-	.LabelManager
+	.LabelManager		- xiao
 		#createLabel
 		#changeLabel
 		#deleteLabel
 		#findLabelByName
-		
+	.EntityManager
+		#createEntity
+		#deleteEntity
+		#findLabelByLabels//要输入一个label的list(数组也行)
+		#setLabels
+		#addLabel
+	.OperationManager
+		#createOperation
+		#changeOperation
+		#deleteOperation
+		#checkPremissionByLabels//这个和下面的函数先不实现方法什么的都不用管
+		#checkPremissionByEntity//这个有两个重载函数,一个是只接受entity的,一个除了接受entity还接受一个改造过的label列表,这个的具体类再议
+	.RuleManager
+		#createRule
+		#changeRule
+		#deleteRule
+	.SystemManager
+		#createSystem
+		#changeSystem
+		//暂时不做delete,因为做delete会导致缓存的处理相对麻烦,如果一定要做的话要先弄一个消息机制,来防止dao与dao直接的直接耦合
+	.ModuleManager
+		#createModule
+		#changeModule
+		//暂时不做delete,因为做delete会导致缓存的处理相对麻烦,如果一定要做的话要先弄一个消息机制,来防止dao与dao直接的直接耦合
 		......
 		剩余上面写完再弄

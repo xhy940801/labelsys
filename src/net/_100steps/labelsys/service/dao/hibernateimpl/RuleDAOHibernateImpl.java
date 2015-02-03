@@ -13,7 +13,9 @@ import org.hibernate.SessionFactory;
 
 
 import com.xiao.util.quickcache.QuickCache;
-
+/**
+ * @author xiao
+ */
 public class RuleDAOHibernateImpl implements RuleDAO
 {
 	private SessionFactory sessionFactory;

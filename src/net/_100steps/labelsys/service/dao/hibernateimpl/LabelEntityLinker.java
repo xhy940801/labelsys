@@ -6,7 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+/**
+ * @author xiao
+ */
 @Entity
 @Table(name="entities_labels")
 class LabelEntityLinker

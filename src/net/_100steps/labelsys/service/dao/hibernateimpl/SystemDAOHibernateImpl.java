@@ -14,7 +14,9 @@ import org.hibernate.SessionFactory;
 
 import com.xiao.util.quickcache.QuickCache;
 
-
+/**
+ * @author xiao
+ */
 public class SystemDAOHibernateImpl implements SystemDAO
 {
 	private SessionFactory sessionFactory;
