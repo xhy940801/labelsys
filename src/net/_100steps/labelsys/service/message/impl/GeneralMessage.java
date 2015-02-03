@@ -1,25 +1,17 @@
 package net._100steps.labelsys.service.message.impl;
 
-import net._100steps.labelsys.service.message.Message;
 import net._100steps.labelsys.service.util.commontree.CommonTree;
 import net._100steps.labelsys.service.util.commontree.GeneralCommonTree;
 import net._100steps.labelsys.service.util.commontree.GeneralNode;
 
-public class GeneralMessage implements Message
+public class GeneralMessage extends AbstractMessage
 {
-	private final int msgCode;
 	private final Object msg;
 	
 	public GeneralMessage(int msgCode, Object msg)
 	{
-		this.msgCode = msgCode;
+		super(msgCode);
 		this.msg = msg;
-	}
-
-	@Override
-	public int getMsgCode()
-	{
-		return msgCode;
 	}
 
 	public Object getMsg()
