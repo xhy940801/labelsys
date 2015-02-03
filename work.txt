@@ -44,7 +44,7 @@
 		#changeLabel
 		#deleteLabel
 		#findLabelByName
-	.EntityManager
+	.EntityManager		- xie
 		#createEntity
 		#deleteEntity
 		#findLabelByLabels//要输入一个label的list(数组也行)
