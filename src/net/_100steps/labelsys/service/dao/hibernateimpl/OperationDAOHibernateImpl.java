@@ -1,5 +1,7 @@
 package net._100steps.labelsys.service.dao.hibernateimpl;
 
+import javax.transaction.Transactional;
+
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.OperationDAO;
 import net._100steps.labelsys.service.model.Operation;
@@ -46,6 +48,7 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	private QuickCache<Object, Operation> cache;
 	
 	@Override
+	@Transactional
 	public void save(Operation operation) {
 		// TODO Auto-generated method stub
 		try 
@@ -57,6 +60,7 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	}
 
 	@Override
+	@Transactional
 	public void update(Operation operation) {
 		cache.remove(operation.getId());
 		try 
@@ -68,6 +72,7 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	}
 
 	@Override
+	@Transactional
 	public Operation getById(int id) {
 		try
 		{
@@ -86,6 +91,7 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	}
 
 	@Override
+	@Transactional
 	public Operation getByName(int moduleId, String name) {
 		OperationNameKey nk = new OperationNameKey(moduleId, name);
 		try 

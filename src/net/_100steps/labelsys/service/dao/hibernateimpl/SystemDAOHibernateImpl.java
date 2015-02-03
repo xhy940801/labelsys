@@ -134,7 +134,7 @@ public class SystemDAOHibernateImpl implements SystemDAO
 		this.sessionFactory = sessionFactory;
 	}
 
-	public void setCacheById(QuickCache<Object, System> cache)
+	public void setCache(QuickCache<Object, System> cache)
 	{
 		this.cache = cache;
 	}

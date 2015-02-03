@@ -39,7 +39,7 @@
 		#getByOperationId//可以设置排序规则
 .model					+ xiao
 .manager
-	.LabelManager		- xiao
+	.LabelManager		+ xiao
 		#createLabel
 		#changeLabel
 		#deleteLabel
@@ -50,7 +50,7 @@
 		#findEntitiesByLabels//要输入一个label的list(数组也行)
 		#setLabels
 		#addLabel
-	.OperationManager
+	.OperationManager	-xiao
 		#createOperation
 		#changeOperation
 		#deleteOperation
