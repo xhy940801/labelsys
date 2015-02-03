@@ -15,10 +15,33 @@
 		class="com.xiao.util.quickcache.ConcurrentQuickCache"
 		scope="prototype">
 	</bean>
+	
+	<bean id="entityDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.EntityDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 	<bean id="labelDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.LabelDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="ModuleDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.ModuleDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
+	</bean>
+	
+	<bean id="operationDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.OperationDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
+	</bean>
+	
+	<bean id="ruleDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.RuleDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
 	</bean>
 	
 	<bean id="systemDAO"

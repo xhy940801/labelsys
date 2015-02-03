@@ -47,7 +47,7 @@
 	.EntityManager
 		#createEntity
 		#deleteEntity
-		#findLabelByLabels//要输入一个label的list(数组也行)
+		#findEntitiesByLabels//要输入一个label的list(数组也行)
 		#setLabels
 		#addLabel
 	.OperationManager

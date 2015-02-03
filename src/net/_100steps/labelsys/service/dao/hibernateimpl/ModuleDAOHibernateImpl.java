@@ -92,7 +92,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	}
 
 	@Override
-	public Module geyByName(int systemId, String name) {
+	public Module getByName(int systemId, String name) {
 		ModuleNameKey mk = new ModuleNameKey(systemId, name);
 		try 
 		{
