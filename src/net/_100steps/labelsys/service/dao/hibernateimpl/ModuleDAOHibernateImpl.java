@@ -2,6 +2,8 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.ModuleDAO;
 import net._100steps.labelsys.service.model.Module;
@@ -46,6 +48,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	private QuickCache<Object, Module> cache;
 
 	@Override
+	@Transactional
 	public void save(Module module) {
 		try 
 		{
@@ -56,6 +59,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	}
 
 	@Override
+	@Transactional
 	public void update(Module module) {
 		cache.remove(module.getId());
 		try 
@@ -67,6 +71,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	}
 
 	@Override
+	@Transactional
 	public Module getById(int id) {
 		try 
 		{
@@ -82,6 +87,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 
 	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
 	public List<Module> getAll() {
 		try 
 		{
@@ -92,6 +98,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	}
 
 	@Override
+	@Transactional
 	public Module getByName(int systemId, String name) {
 		ModuleNameKey mk = new ModuleNameKey(systemId, name);
 		try 
@@ -114,8 +121,8 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory  = sessionFactory;
 	}
-
-	public void setCacheById(QuickCache<Object, Module> cache) {
+	
+	public void setCache(QuickCache<Object, Module> cache) {
 		this.cache = cache;
 		this.cache.setKeyFactory(
 				(value)->{

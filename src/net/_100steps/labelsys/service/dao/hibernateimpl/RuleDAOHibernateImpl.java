@@ -2,15 +2,14 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
 
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.RuleDAO;
 import net._100steps.labelsys.service.model.Rule;
 
-
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-
 
 import com.xiao.util.quickcache.QuickCache;
 /**
@@ -22,6 +21,7 @@ public class RuleDAOHibernateImpl implements RuleDAO
 	private QuickCache<Integer, List<Rule>> cacheByOperationId;
 
 	@Override
+	@Transactional
 	public void save(Rule rule)
 	{
 		cacheByOperationId.remove(rule.getOperationId());
@@ -36,6 +36,7 @@ public class RuleDAOHibernateImpl implements RuleDAO
 	}
 
 	@Override
+	@Transactional
 	public void update(Rule rule)
 	{
 		cacheByOperationId.remove(rule.getOperationId());
@@ -50,6 +51,7 @@ public class RuleDAOHibernateImpl implements RuleDAO
 	}
 
 	@Override
+	@Transactional
 	public Rule getById(int id)
 	{
 		try
@@ -64,6 +66,7 @@ public class RuleDAOHibernateImpl implements RuleDAO
 
 	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
 	public List<Rule> getByOperationId(int id, final Order order)
 	{
 		try

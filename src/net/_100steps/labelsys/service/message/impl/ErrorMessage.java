@@ -16,7 +16,7 @@ public class ErrorMessage extends AbstractMessage
 	
 	public ErrorMessage(int errorCode, Exception exception)
 	{
-		super(errorCode);
+		super(errorCode);exception.printStackTrace();
 		this.exception = exception;
 	}
 	
