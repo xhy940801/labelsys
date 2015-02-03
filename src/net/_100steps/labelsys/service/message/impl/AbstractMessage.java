@@ -16,5 +16,11 @@ public abstract class AbstractMessage implements Message
 	{
 		return msgCode;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "msgCode: " + msgCode;
+	}
 
 }
