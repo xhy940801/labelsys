@@ -46,5 +46,5 @@ public interface ModuleDAO {
 	 * @return module
 	 * @author XT1024
 	 */
-	public Module geyByName(String name);
+	public Module getByName(int systemId, String name);
 }

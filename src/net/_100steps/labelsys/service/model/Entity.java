@@ -12,7 +12,6 @@ public class Entity
 {
 
 	private int id;
-	private int systemId;
 	private int moduleId;
 	private int foreignKey;
 
@@ -20,9 +19,8 @@ public class Entity
 	{
 	}
 
-	public Entity(int systemId, int moduleId, int foreignKey)
+	public Entity(int moduleId, int foreignKey)
 	{
-		this.systemId = systemId;
 		this.moduleId = moduleId;
 		this.foreignKey = foreignKey;
 	}
@@ -30,7 +28,6 @@ public class Entity
 	public Entity(Entity entity)
 	{
 		this.id = entity.id;
-		this.systemId = entity.systemId;
 		this.moduleId = entity.moduleId;
 		this.foreignKey = entity.foreignKey;
 	}
@@ -45,17 +42,6 @@ public class Entity
 	public void setId(int id)
 	{
 		this.id = id;
-	}
-
-	@Column(name="system_id")
-	public int getSystemId()
-	{
-		return this.systemId;
-	}
-
-	public void setSystemId(int systemId)
-	{
-		this.systemId = systemId;
 	}
 
 	@Column(name="module_id")

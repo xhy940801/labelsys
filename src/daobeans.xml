@@ -11,9 +11,43 @@
 	http://www.springframework.org/schema/aop
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+	<bean id="quickCache"
+		class="com.xiao.util.quickcache.ConcurrentQuickCache"
+		scope="prototype">
+	</bean>
+	
+	<bean id="entityDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.EntityDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
 	<bean id="labelDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.LabelDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="moduleDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.ModuleDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
+	</bean>
+	
+	<bean id="operationDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.OperationDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
+	</bean>
+	
+	<bean id="ruleDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.RuleDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cacheByOperationId" ref="quickCache"></property>
+	</bean>
+	
+	<bean id="systemDAO"
+		class="net._100steps.labelsys.service.dao.hibernateimpl.SystemDAOHibernateImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
 	</bean>
 
 </beans>

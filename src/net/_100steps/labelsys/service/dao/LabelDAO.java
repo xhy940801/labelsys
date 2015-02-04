@@ -8,7 +8,7 @@ public interface LabelDAO
 {
 	/**
 	 * 保存label
-	 * @param label 要保存的实体, 保存后的id会被写回到label中
+	 * @param label 要保存的实体,保存后的id会被写回到label中
 	 * @throws DAOException 当操作失败时抛出异常
 	 */
 	public void save(Label label);
@@ -33,6 +33,22 @@ public interface LabelDAO
 	 * @return 如果找到,则返回实体,如果没找到,则返回null
 	 */
 	public Label getById(int id);
+	
+	/**
+	 * 通过名称获取记录
+	 * @param moduleId 要获取的记录的模块名
+	 * @param name 名字
+	 * @return 如果找到,则返回实体,如果没找到,则返回null
+	 */
+	public Label getByName(int moduleId, String name);
+	
+	/**
+	 * 通过名称获取记录
+	 * @param moduleId 要获取的记录的模块名
+	 * @param name 名字
+	 * @return 如果找到,则返回实体,如果没找到list,则返回null
+	 */
+	public List<Label> findByName(int moduleId, String name);
 	
 	/**
 	 * 获取实体所拥有的所有标签

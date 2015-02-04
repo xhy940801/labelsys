@@ -29,8 +29,9 @@ public interface OperationDAO {
 	/**
 	 * 根据name获得operation
 	 * @param name
+	 * @param moduleId
 	 * @return
 	 * @author XT1024
 	 */
-	public Operation getByName(String name);
+	public Operation getByName(int moduleId, String name);
 }

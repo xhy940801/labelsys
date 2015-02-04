@@ -17,12 +17,10 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public void save(Entity entity) {
-		// TODO Auto-generated method stub
 		try 
 		{
 			sessionFactory.getCurrentSession().save(entity);
 		} catch (HibernateException e) {
-			// TODO: handle exception
 			throw new DAOException(e);
 		}
 	}
@@ -30,12 +28,10 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public void update(Entity entity) {
-		// TODO Auto-generated method stub
 		try 
 		{
 			sessionFactory.getCurrentSession().update(entity);
 		} catch (HibernateException e) {
-			// TODO: handle exception
 			throw new DAOException(e);
 		}
 	}
@@ -43,7 +39,6 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public void setLabel(int entityId, List<Integer> labelId) {
-		// TODO Auto-generated method stub
 		try
 		{
 			sessionFactory.getCurrentSession()
@@ -58,7 +53,6 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 				sessionFactory.getCurrentSession().save(labelEntityLinker);
 			}
 		} catch (HibernateException e) {
-			// TODO: handle exception
 			throw new DAOException(e);
 		}
 	}
@@ -66,7 +60,6 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public void addLabel(int entityId, int labelId) {
-		// TODO Auto-generated method stub
 		try 
 		{
 			LabelEntityLinker labelEntityLinker = new LabelEntityLinker();
@@ -74,7 +67,6 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 			labelEntityLinker.setLabelId(labelId);
 			sessionFactory.getCurrentSession().save(labelEntityLinker);
 		} catch (HibernateException e) {
-			// TODO: handle exception
 			throw new DAOException(e);
 		}
 	}
@@ -82,13 +74,11 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public void deleteLabel(int entityId, int labelId) {
-		// TODO Auto-generated method stub
 		try 
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from LabelEntityLinker as le where le.entityId = ? and le.labelId = ? ").setInteger(0, entityId).setInteger(1, labelId).executeUpdate()==0)
 				throw new DAOException("记录不存在");
 		} catch (HibernateException e) {
-			// TODO: handle exception
 			throw new DAOException(e);
 		}
 	}
@@ -96,13 +86,11 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public void delete(int entityId) {
-		// TODO Auto-generated method stub
 		try 
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from Entity as e where e.id = ?").setInteger(0, entityId).executeUpdate()==0)
 				throw new DAOException("记录不存在");
 		} catch (HibernateException e) {
-			// TODO: handle exception
 			throw new DAOException(e);
 		}
 	}
@@ -110,7 +98,6 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	@Override
 	@Transactional
 	public Entity getById(int id) {
-		// TODO Auto-generated method stub
 		try
 		{
 			return (Entity) sessionFactory.getCurrentSession().get(Entity.class, id);
@@ -121,14 +108,12 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public List<Entity> getByForeignKey(int foreignKey) {
-		// TODO Auto-generated method stub
+	public Entity getByForeignKey(int moduleId, int foreignKey) {
 		try
 		{
-			return (List<Entity>) sessionFactory.getCurrentSession().createQuery("from Entity as e where e.foreignKey = ?").setInteger(0, foreignKey).list();
+			return (Entity) sessionFactory.getCurrentSession().createQuery("from Entity as e where e.foreignKey = ? and e.moduleId = ?").setInteger(0, foreignKey).setInteger(1, moduleId).uniqueResult();
 		}
 		catch (HibernateException e)
 		{

@@ -10,5 +10,12 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/aop
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<bean id="labelManager"
+		class="net._100steps.labelsys.service.manager.defaultimpl.LabelManagerDefaultImpl">
+		<property name="labelDAO" ref="labelDAO"></property>
+		<property name="moduleDAO" ref="moduleDAO"></property>
+		<property name="systemDAO" ref="systemDAO"></property>
+	</bean>
 
 </beans>
