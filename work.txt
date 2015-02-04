@@ -15,6 +15,8 @@
 		#delete
 		#getById
 		#getByForeignKey
+		#hasLabel
+		#findEntitiesByLabels
 	.SystemDAO			+ xiao
 		#save
 		#update
@@ -56,11 +58,11 @@
 		#deleteOperation
 		#checkPremissionByLabels//这个和下面的函数先不实现方法什么的都不用管
 		#checkPremissionByEntity//这个有两个重载函数,一个是只接受entity的,一个除了接受entity还接受一个改造过的label列表,这个的具体类再议
-	.RuleManager
+	.RuleManager		- xiao
 		#createRule
 		#changeRule
 		#deleteRule
-	.SystemManager
+	.SystemManager		- xie
 		#createSystem
 		#changeSystem
 		#deleteSystem
