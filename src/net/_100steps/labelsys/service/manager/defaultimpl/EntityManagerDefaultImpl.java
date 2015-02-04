@@ -34,8 +34,31 @@ public class EntityManagerDefaultImpl implements EntityManager{
 		}
 		return new EntityMessage(entity);
 	}
-	//Message deleteEntity(int entityId);
-	//Message findEntityByLabels(List<Integer>labelsId);
+	public Message deleteEntity(int entityId) {
+		Entity entity;
+		try 
+		{
+			entity = entityDAO.getById(entityId);
+			if (entity==null)
+				return new ErrorMessage(302020);
+			entityDAO.delete(entityId);
+		} catch (DAOException e) {
+			// TODO: handle exception
+			return new ErrorMessage(402020,e);
+		}
+		return new EntityMessage(entity);
+	}
+	public Message findEntitiesByLabels(List<Integer>labelsId) {
+		List<Entity> entities;
+		try 
+		{
+			entities = entityDAO.findEntitiesByLabels(labelsId);
+		} catch (DAOException e) {
+			// TODO: handle exception
+			return new ErrorMessage(402030,e);
+		}
+		return new EntityMessage(entities);
+	}
 	@Override
 	public Message setLabels(int entityId, List<Integer> labelsId) {
 		// TODO Auto-generated method stub

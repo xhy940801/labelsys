@@ -62,6 +62,8 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	public void addLabel(int entityId, int labelId) {
 		try 
 		{
+			if (hasLabel(entityId, labelId))
+				throw new DAOException("the record is exist");
 			LabelEntityLinker labelEntityLinker = new LabelEntityLinker();
 			labelEntityLinker.setEntityId(entityId);
 			labelEntityLinker.setLabelId(labelId);
@@ -77,7 +79,7 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		try 
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from LabelEntityLinker as le where le.entityId = ? and le.labelId = ? ").setInteger(0, entityId).setInteger(1, labelId).executeUpdate()==0)
-				throw new DAOException("记录不存在");
+				throw new DAOException("record is unexist");
 		} catch (HibernateException e) {
 			throw new DAOException(e);
 		}
@@ -89,7 +91,8 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		try 
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from Entity as e where e.id = ?").setInteger(0, entityId).executeUpdate()==0)
-				throw new DAOException("记录不存在");
+				throw new DAOException("record is unexist");
+			sessionFactory.getCurrentSession().createQuery("delete from LabelEntityLinker as el where el.entityId = ?").setInteger(0, entityId).executeUpdate();
 		} catch (HibernateException e) {
 			throw new DAOException(e);
 		}
@@ -121,6 +124,35 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		}
 	}
 	
+	@Override
+	@Transactional
+	public Boolean hasLabel(int entityId,int labelId) {
+		try {
+			if (sessionFactory.getCurrentSession().createQuery("from LabelEntityLinker as le where le.entityId=? and le.labelId=?").setInteger(0, entityId).setInteger(1, labelId).uniqueResult()==null) 
+				return Boolean.FALSE;
+			return Boolean.TRUE;
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Entity> findEntitiesByLabels(List<Integer>labelsId) {
+		try
+		{
+			return (List<Entity>)sessionFactory.getCurrentSession()
+					.createQuery("from Entity as e where e.id in(select le.entityId from LabelEntityLinker as le where le.labelId in(:labelsId) group by le.entityId having count(le.labelId)=(:size))")
+					.setInteger("size", labelsId.size())
+					.setParameterList("labelsId", labelsId)
+					.list();
+		}catch(HibernateException e) {
+			throw new DAOException(e);
+		}
+		
+	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

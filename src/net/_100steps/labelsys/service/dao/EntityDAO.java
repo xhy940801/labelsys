@@ -8,7 +8,7 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 增加entity
+	 * add entity
 	 * @param entity
 	 * @author XT1024
 	 */
@@ -16,7 +16,7 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 更新entity
+	 * update entity
 	 * @param entity
 	 * @author XT1024
 	 */
@@ -24,7 +24,7 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 设置label
+	 * set label
 	 * @param labelId
 	 * @author XT1024
 	 */
@@ -32,7 +32,7 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 增加label
+	 * add label
 	 * @param entityId
 	 * @param labelId
 	 * @author XT1024
@@ -42,7 +42,7 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 删除一条关联
+	 * delete Label-Entity
 	 * @param entityId
 	 * @param labelId
 	 * @author XT1024
@@ -52,14 +52,13 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 删除一个entity
+	 * delete entity
 	 * @param entityId
 	 * @author XT1024
 	 */
 	public void delete(int entityId);
 	
 	/**
-	 * 根据id获得Entity
 	 * @param id
 	 * @return
 	 * @author XT1024
@@ -69,10 +68,23 @@ public interface EntityDAO {
 	
 	
 	/**
-	 * 根据foreignKey获得entity
 	 * @param foreignKey
 	 * @return
 	 * @author XT1024
 	 */
 	public Entity getByForeignKey(int moduleId, int foreignKey);
+	
+	/**
+	 * @param entityId
+	 * @param labelId
+	 * @return
+	 */
+	public Boolean hasLabel(int entityId,int labelId);
+	
+	/**
+	 * @param labelsId
+	 * @return
+	 */
+	public List<Entity> findEntitiesByLabels(List<Integer>labelsId);
+	
 }
