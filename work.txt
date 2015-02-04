@@ -50,7 +50,7 @@
 		#findEntitiesByLabels//要输入一个label的list(数组也行)
 		#setLabels
 		#addLabel
-	.OperationManager	-xiao
+	.OperationManager	+ xiao
 		#createOperation
 		#changeOperation
 		#deleteOperation
@@ -63,10 +63,12 @@
 	.SystemManager
 		#createSystem
 		#changeSystem
-		//暂时不做delete,因为做delete会导致缓存的处理相对麻烦,如果一定要做的话要先弄一个消息机制,来防止dao与dao直接的直接耦合
+		#deleteSystem
 	.ModuleManager
 		#createModule
 		#changeModule
-		//暂时不做delete,因为做delete会导致缓存的处理相对麻烦,如果一定要做的话要先弄一个消息机制,来防止dao与dao直接的直接耦合
+		#deleteSystem
 		......
-		剩余上面写完再弄
+		################注意!!!!!!!###########################
+		上面所以方法必须有两种实现,具体参考LabelManager和OperationManager
+		#####################################################

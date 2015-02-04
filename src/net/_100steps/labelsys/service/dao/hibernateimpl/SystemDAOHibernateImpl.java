@@ -12,6 +12,7 @@ import net._100steps.labelsys.service.model.System;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
+import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 
 /**
@@ -22,6 +23,12 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	private SessionFactory sessionFactory;
 	private QuickCache<Object, System> cache;
 	private SoftReference<List<System>> refSystems;
+	private CacheSynchronizer cacheSynchronizer;
+	
+	public SystemDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
+	{
+		this.cacheSynchronizer = cacheSynchronizer;
+	}
 
 	@Override
 	@Transactional
@@ -137,6 +144,17 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	public void setCache(QuickCache<Object, System> cache)
 	{
 		this.cache = cache;
+		cacheSynchronizer.addCache(
+				cache,
+				"system",
+				(curcache, signal, info)->
+				{
+					if(signal.equals("clear"))
+						curcache.clear();
+					else if(signal.equals("remove"))
+						curcache.remove(info);
+				}
+			);
 	}
 
 }

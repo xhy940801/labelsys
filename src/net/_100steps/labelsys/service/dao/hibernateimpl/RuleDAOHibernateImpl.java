@@ -11,6 +11,7 @@ import net._100steps.labelsys.service.model.Rule;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
+import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 /**
  * @author xiao
@@ -19,6 +20,12 @@ public class RuleDAOHibernateImpl implements RuleDAO
 {
 	private SessionFactory sessionFactory;
 	private QuickCache<Integer, List<Rule>> cacheByOperationId;
+	private CacheSynchronizer cacheSynchronizer;
+	
+	public RuleDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
+	{
+		this.cacheSynchronizer = cacheSynchronizer;
+	}
 
 	@Override
 	@Transactional
@@ -103,6 +110,22 @@ public class RuleDAOHibernateImpl implements RuleDAO
 	public void setCacheByOperationId(QuickCache<Integer, List<Rule>> cacheByOperationId)
 	{
 		this.cacheByOperationId = cacheByOperationId;
+		cacheSynchronizer.addCache(
+				cacheByOperationId,
+				"rule",
+				(curcache, signal, info)->
+				{
+					if(signal.equals("clear"))
+						curcache.clear();
+					else if(signal.equals("remove"))
+						curcache.remove(info);
+				}
+			);
+	}
+
+	public void setCacheSynchronizer(CacheSynchronizer cacheSynchronizer)
+	{
+		this.cacheSynchronizer = cacheSynchronizer;
 	}
 
 }

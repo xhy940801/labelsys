@@ -16,8 +16,8 @@ public class ErrorMessage extends AbstractMessage
 	
 	public ErrorMessage(int errorCode, Exception exception)
 	{
-		super(errorCode);exception.printStackTrace();
-		this.exception = exception;
+		super(errorCode);
+		this.exception = exception;throw new RuntimeException(exception);
 	}
 	
 	public Exception getException()

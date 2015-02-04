@@ -9,6 +9,7 @@ import net._100steps.labelsys.service.model.Operation;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
+import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 
 
@@ -46,6 +47,13 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	
 	private SessionFactory sessionFactory;
 	private QuickCache<Object, Operation> cache;
+	private CacheSynchronizer cacheSynchronizer;
+	
+	public OperationDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
+	{
+		this.cacheSynchronizer = cacheSynchronizer;
+	}
+
 	
 	@Override
 	@Transactional
@@ -110,6 +118,22 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 		}
 	}
 	
+	@Override
+	@Transactional
+	public void delete(int id) {
+		cache.remove(id);
+		cacheSynchronizer.sendSignal("rule", "remove", id);
+		try {
+			int rs = sessionFactory.getCurrentSession()
+					.createQuery("delete from Operation as o where o.id = ?")
+					.setInteger(0, id).executeUpdate();
+			if(rs == 0)
+				throw new DAOException("记录不存在");
+		} catch (HibernateException e) {
+			throw new DAOException(e);
+		}
+	}
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -122,6 +146,15 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 					os[0] = value.getId();
 					os[1] = new OperationNameKey(value.getModuleId(), value.getName());
 					return os;
+				});
+		cacheSynchronizer.addCache(
+				cache,
+				"operation",
+				(curcache, signal, info)->{
+					if(signal.equals("clear"))
+						curcache.clear();
+					else if(signal.equals("remove"))
+						curcache.remove(info);
 				});
 	}
 

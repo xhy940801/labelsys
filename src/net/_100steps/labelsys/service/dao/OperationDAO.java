@@ -34,4 +34,6 @@ public interface OperationDAO {
 	 * @author XT1024
 	 */
 	public Operation getByName(int moduleId, String name);
+	
+	public void delete(int id);
 }
