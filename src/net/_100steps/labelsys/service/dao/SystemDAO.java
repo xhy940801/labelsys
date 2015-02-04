@@ -38,4 +38,10 @@ public interface SystemDAO
 	 * @return 全部记录
 	 */
 	public List<System> getAll();
+	
+	/**
+	 * 删除
+	 * @param id
+	 */
+	public void delete(int id);
 }

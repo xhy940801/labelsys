@@ -136,6 +136,26 @@ public class SystemDAOHibernateImpl implements SystemDAO
 		}
 	}
 	
+	@Override
+	@Transactional
+	public void delete(int id)
+	{
+		cache.remove(id);
+		cacheSynchronizer.sendSignal("module", "clear", null);
+		try
+		{
+			int rs = sessionFactory.getCurrentSession()
+					.createQuery("delete from System as s where s.id=?")
+					.executeUpdate();
+			if(rs == 0)
+				throw new DAOException("记录不存在");
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
+	
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		this.sessionFactory = sessionFactory;
