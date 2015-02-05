@@ -36,6 +36,7 @@ public class Operation
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(updatable=false)
 	public int getId()
 	{
 		return this.id;

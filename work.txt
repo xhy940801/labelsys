@@ -5,7 +5,7 @@
 		#delete
 		#getById
 		#getByEntityId
-	.EntityDAO			- xie
+	.EntityDAO			+ xie
 		#save
 		#update
 		#setLabel
@@ -15,35 +15,62 @@
 		#delete
 		#getById
 		#getByForeignKey
-	.SystemDAO			- xiao
+		#hasLabel
+		#findEntitiesByLabels
+	.SystemDAO			+ xiao
 		#save
 		#update
 		#getById
 		#getAll
 		#getByName
-	.ModuleDAO
+	.ModuleDAO			+ xie
 		#save
 		#update
 		#getById
 		#getAll
 		#getByName
-	.OperationDAO
+	.OperationDAO			+ xie
 		#save
 		#update
 		#getById
 		#getByName
-	.Rule
+	.RuleDAO			+ xiao
 		#save
 		#update
 		#getById
 		#getByOperationId//可以设置排序规则
 .model					+ xiao
 .manager
-	.LabelManager
+	.LabelManager		+ xiao
 		#createLabel
 		#changeLabel
 		#deleteLabel
 		#findLabelByName
-		
+	.EntityManager		- xie
+		#createEntity
+		#deleteEntity
+		#findEntitiesByLabels//要输入一个label的list(数组也行)
+		#setLabels
+		#addLabel
+	.OperationManager	+ xiao
+		#createOperation
+		#changeOperation
+		#deleteOperation
+		#checkPremissionByLabels//这个和下面的函数先不实现方法什么的都不用管
+		#checkPremissionByEntity//这个有两个重载函数,一个是只接受entity的,一个除了接受entity还接受一个改造过的label列表,这个的具体类再议
+	.RuleManager		- xiao
+		#createRule
+		#changeRule
+		#deleteRule
+	.SystemManager		- xie
+		#createSystem
+		#changeSystem
+		#deleteSystem
+	.ModuleManager
+		#createModule
+		#changeModule
+		#deleteSystem
 		......
-		剩余上面写完再弄
+		################注意!!!!!!!###########################
+		上面所以方法必须有两种实现,具体参考LabelManager和OperationManager
+		#####################################################
