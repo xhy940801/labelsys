@@ -47,4 +47,10 @@ public interface ModuleDAO {
 	 * @author XT1024
 	 */
 	public Module getByName(int systemId, String name);
+	
+	/**
+	 * 删除
+	 * @param id
+	 */
+	public void delete(int id);
 }
