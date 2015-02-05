@@ -3,9 +3,10 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.EntityDAO;

@@ -1,8 +1,6 @@
 package net._100steps.labelsys.service.manager.defaultimpl;
 
-
-
-import org.springframework.transaction.annotation.Transactional;
+import javax.transaction.Transactional;
 
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.SystemDAO;
