@@ -90,6 +90,10 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from Entity as e where e.id = ?").setInteger(0, entityId).executeUpdate()==0)
 				throw new DAOException("记录不存在");
+			sessionFactory.getCurrentSession()
+					.createQuery("delete from LabelEntityLinker as le where le.entityId = ?")
+					.setInteger(0, entityId)
+					.executeUpdate();
 		} catch (HibernateException e) {
 			throw new DAOException(e);
 		}

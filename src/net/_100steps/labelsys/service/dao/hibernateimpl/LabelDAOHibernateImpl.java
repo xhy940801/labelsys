@@ -10,12 +10,47 @@ import net._100steps.labelsys.service.model.Label;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+
+import com.xiao.util.quickcache.QuickCache;
 /**
  * @author xiao
  */
 public class LabelDAOHibernateImpl implements LabelDAO
 {
+	private class LabelNameKey
+	{
+		int moduleId;
+		String name;
+		LabelNameKey(int moduleId, String name)
+		{
+			this.moduleId = moduleId;
+			this.name = name;
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			if (o instanceof LabelNameKey)
+			{
+				LabelNameKey mnk = (LabelNameKey) o;
+				return mnk.moduleId == moduleId && mnk.name.equals(name);
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			int result = 17;
+			int c1 = moduleId;
+			int c2 = name.hashCode();
+			result = 31 * result + c1;
+			result = 31 * result + c2;
+			return result;
+		}
+	}
 	private SessionFactory sessionFactory;
+	private QuickCache<Object, Label> cache;
 
 	@Override
 	@Transactional
@@ -35,6 +70,7 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	@Transactional
 	public void update(Label label)
 	{
+		cache.remove(label.getId());
 		try
 		{
 			sessionFactory.getCurrentSession().update(label);
@@ -49,10 +85,15 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	@Transactional
 	public void delete(int id)
 	{
+		cache.remove(id);
 		try
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from Label as l where l.id=?").setInteger(0, id).executeUpdate() == 0)
 				throw new DAOException("记录不存在");
+			sessionFactory.getCurrentSession()
+					.createQuery("delete from LabelEntityLinker as le where le.labelId = ?")
+					.setInteger(0, id)
+					.executeUpdate();
 		}
 		catch (HibernateException e)
 		{
@@ -66,7 +107,10 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	{
 		StringBuilder builder = new StringBuilder();
 		for(Integer id : ids)
+		{
+			cache.remove(id);
 			builder.append(id).append(',');
+		}
 		builder.append(-1);
 		try
 		{
@@ -87,7 +131,7 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	{
 		try
 		{
-			return (Label) sessionFactory.getCurrentSession().get(Label.class, id);
+			return cache.get(id, (key)->{return (Label) sessionFactory.getCurrentSession().get(Label.class, (Integer) key);});
 		}
 		catch (HibernateException e)
 		{
@@ -114,12 +158,17 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	@Transactional
 	public Label getByName(int moduleId, String name)
 	{
+		LabelNameKey nk = new LabelNameKey(moduleId, name);
 		try
 		{
-			return (Label) sessionFactory.getCurrentSession()
-					.createQuery("from Label as l where l.moduleId=? and l.name=?")
-					.setInteger(0, moduleId).setString(1, name)
-					.uniqueResult();
+			return cache.get(nk, (key)->
+			{
+				LabelNameKey tk = (LabelNameKey) key;
+				return (Label) sessionFactory.getCurrentSession()
+						.createQuery("from Label as l where l.moduleId=? and l.name=?")
+						.setInteger(0, tk.moduleId).setString(1, tk.name)
+						.uniqueResult();
+			});
 		}
 		catch (HibernateException e)
 		{
@@ -141,6 +190,18 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		this.sessionFactory = sessionFactory;
+	}
+
+	public void setCache(QuickCache<Object, Label> cache)
+	{
+		this.cache = cache;
+		cache.setKeyFactory((value)->
+		{
+			Object[] os = new Object[2];
+			os[0] = value.getId();
+			os[1] = new LabelNameKey(value.getModuleId(), value.getName());
+			return os;
+		});
 	}
 
 }
