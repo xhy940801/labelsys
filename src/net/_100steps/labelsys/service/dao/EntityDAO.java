@@ -95,4 +95,11 @@ public interface EntityDAO {
 	 * @return
 	 */
 	public List<Entity> findEntitiesByLabels(List<Integer>labelsId);
+	
+	/**
+	 * 获取
+	 * @param modulesId
+	 * @return
+	 */
+	public List<Integer> findEntitiesIdByModules(List<Integer> modulesId);
 }

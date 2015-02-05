@@ -63,4 +63,11 @@ public interface LabelDAO
 	 * @return 标签列表
 	 */
 	public List<Label> getByEntityId(int id);
+	
+	/**
+	 * 获取
+	 * @param modulesId
+	 * @return
+	 */
+	public List<Integer> findLabelsIdByModules(List<Integer> modulesId);
 }

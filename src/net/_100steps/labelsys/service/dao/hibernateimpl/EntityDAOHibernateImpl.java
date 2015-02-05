@@ -172,6 +172,25 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		}
 		
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Integer> findEntitiesIdByModules(List<Integer> modulesId)
+	{
+		try
+		{
+			return (List<Integer>) sessionFactory
+					.getCurrentSession()
+					.createQuery(
+							"select m.id from Entity as e where e.moduleId in(:modulesId)")
+					.setParameterList("modulesId", modulesId).list();
+		}
+		catch (HibernateException e)
+		{
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

@@ -187,6 +187,26 @@ public class LabelDAOHibernateImpl implements LabelDAO
 				.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Integer> findLabelsIdByModules(List<Integer> modulesId)
+	{
+		try
+		{
+			return (List<Integer>) sessionFactory
+					.getCurrentSession()
+					.createQuery(
+							"select m.id from Label as l where l.moduleId in(:modulesId)")
+					.setParameterList("modulesId", modulesId).list();
+		}
+		catch (HibernateException e)
+		{
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
+	
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		this.sessionFactory = sessionFactory;
