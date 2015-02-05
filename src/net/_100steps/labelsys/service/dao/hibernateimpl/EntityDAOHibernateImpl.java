@@ -120,7 +120,34 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 			throw new DAOException(e);
 		}
 	}
-	
+	@Override
+	@Transactional
+	public Boolean hasLabel(int entityId,int labelId) {
+		try {
+			if (sessionFactory.getCurrentSession().createQuery("from LabelEntityLinker as le where le.entityId=? and le.labelId=?").setInteger(0, entityId).setInteger(1, labelId).uniqueResult()==null) 
+				return Boolean.FALSE;
+			return Boolean.TRUE;
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Entity> findEntitiesByLabels(List<Integer>labelsId) {
+		try
+		{
+			return (List<Entity>)sessionFactory.getCurrentSession()
+					.createQuery("from Entity as e where e.id in(select le.entityId from LabelEntityLinker as le where le.labelId in(:labelsId) group by le.entityId having count(le.labelId)=(:size))")
+					.setInteger("size", labelsId.size())
+					.setParameterList("labelsId", labelsId)
+					.list();
+		}catch(HibernateException e) {
+			throw new DAOException(e);
+		}
+		
+	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

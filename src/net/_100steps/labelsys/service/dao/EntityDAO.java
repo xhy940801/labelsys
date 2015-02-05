@@ -75,4 +75,17 @@ public interface EntityDAO {
 	 * @author XT1024
 	 */
 	public Entity getByForeignKey(int moduleId, int foreignKey);
+	/**
+	 * 
+	 * @param entityId
+	 * @param labelId
+	 * @return
+	 */
+	public Boolean hasLabel(int entityId,int labelId);
+	/**
+	 * 
+	 * @param labelsId
+	 * @return
+	 */
+	public List<Entity> findEntitiesByLabels(List<Integer>labelsId);
 }
