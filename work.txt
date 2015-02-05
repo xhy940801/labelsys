@@ -46,7 +46,7 @@
 		#changeLabel
 		#deleteLabel
 		#findLabelByName
-	.EntityManager		- xie
+	.EntityManager		+ xie
 		#createEntity
 		#deleteEntity
 		#findEntitiesByLabels//要输入一个label的list(数组也行)
@@ -62,7 +62,7 @@
 		#createRule
 		#changeRule
 		#deleteRule
-	.SystemManager		- xie
+	.SystemManager		+ xie
 		#createSystem
 		#changeSystem
 		#deleteSystem
