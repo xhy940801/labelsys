@@ -138,6 +138,7 @@ public class SystemDAOHibernateImpl implements SystemDAO
 		{
 			int rs = sessionFactory.getCurrentSession()
 					.createQuery("delete from System as s where s.id=?")
+					.setInteger(0, id)
 					.executeUpdate();
 			if(rs == 0)
 				throw new DAOException("记录不存在");

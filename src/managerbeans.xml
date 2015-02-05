@@ -17,6 +17,17 @@
 		<property name="moduleDAO" ref="moduleDAO"></property>
 		<property name="systemDAO" ref="systemDAO"></property>
 	</bean>
+	<bean id="entityManager"
+		class="net._100steps.labelsys.service.manager.defaultimpl.EntityManagerDefaultImpl">
+		<property name="labelDAO" ref="labelDAO"></property>
+		<property name="moduleDAO" ref="moduleDAO"></property>
+		<property name="entityDAO" ref="entityDAO"></property>
+		<property name="systemDAO" ref="systemDAO"></property>
+	</bean>
+	<bean id="systemManager"
+		class="net._100steps.labelsys.service.manager.defaultimpl.SystemManagerDefaultImpl">
+		<property name="systemDAO" ref="systemDAO"></property>
+	</bean>	
 	
 	<bean id="operationManager"
 		class="net._100steps.labelsys.service.manager.defaultimpl.OperationManagerDefaultImpl">
