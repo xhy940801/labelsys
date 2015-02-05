@@ -46,6 +46,8 @@
 		<property name="moduleDAO" ref="moduleDAO"></property>
 		<property name="systemDAO" ref="systemDAO"></property>
 		<property name="operationDAO" ref="operationDAO"></property>
+		<property name="ruleDAO" ref="ruleDAO"></property>
+		<property name="entityDAO" ref="entityDAO"></property>
 	</bean>
 	
 	<bean id="moduleManager"

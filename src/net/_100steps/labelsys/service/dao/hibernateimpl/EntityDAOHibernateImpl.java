@@ -141,11 +141,11 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	}
 	@Override
 	@Transactional
-	public Boolean hasLabel(int entityId,int labelId) {
+	public boolean hasLabel(int entityId,int labelId) {
 		try {
 			if (sessionFactory.getCurrentSession().createQuery("from LabelEntityLinker as le where le.entityId=? and le.labelId=?").setInteger(0, entityId).setInteger(1, labelId).uniqueResult()==null) 
-				return Boolean.FALSE;
-			return Boolean.TRUE;
+				return false;
+			return true;
 		} catch (HibernateException e) {
 			// TODO: handle exception
 			throw new DAOException(e);

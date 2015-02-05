@@ -19,5 +19,11 @@ public class RuleMessage extends AbstractMessage
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "type: RuleMessage msgcode: " + msgCode + "rule:{ " + rule + " }";
+	}
 
 }

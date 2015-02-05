@@ -88,7 +88,7 @@ public interface EntityDAO {
 	 * @param labelId
 	 * @return
 	 */
-	public Boolean hasLabel(int entityId,int labelId);
+	public boolean hasLabel(int entityId,int labelId);
 	/**
 	 * 
 	 * @param labelsId

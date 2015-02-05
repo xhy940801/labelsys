@@ -103,5 +103,11 @@ public class Rule
 	{
 		this.created = created;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "id: " + id + ";operationId: " + operationId + ";exp: " + exp + ";permission:" + permission + ";created:" + created;
+	}
 
 }
