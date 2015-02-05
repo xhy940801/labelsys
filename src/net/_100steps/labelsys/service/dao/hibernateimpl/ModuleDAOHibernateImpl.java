@@ -11,6 +11,7 @@ import net._100steps.labelsys.service.model.Module;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
+import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 
 public class ModuleDAOHibernateImpl implements ModuleDAO{
@@ -46,6 +47,13 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	
 	private SessionFactory sessionFactory;
 	private QuickCache<Object, Module> cache;
+	private CacheSynchronizer cacheSynchronizer;
+	
+	public ModuleDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
+	{
+		this.cacheSynchronizer = cacheSynchronizer;
+	}
+
 
 	@Override
 	@Transactional
@@ -118,6 +126,26 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 		}
 	}
 	
+	@Override
+	@Transactional
+	public void delete(int id)
+	{
+		cache.remove(id);
+		cacheSynchronizer.sendSignal("operation", "clear", null);
+		try
+		{
+			int rs = sessionFactory.getCurrentSession()
+					.createQuery("delete from Module as s where s.id=?")
+					.executeUpdate();
+			if(rs == 0)
+				throw new DAOException("记录不存在");
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory  = sessionFactory;
 	}
@@ -131,6 +159,15 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 						os[1] = new ModuleNameKey(value.getSystemId(), value.getName());
 						return os;
 					});
+		cacheSynchronizer.addCache(
+				cache,
+				"module",
+				(curcache, signal, info)->{
+					if(signal.equals("clear"))
+						curcache.clear();
+					else if(signal.equals("remove"))
+						curcache.remove(info);
+				});
 	}
 
 }
