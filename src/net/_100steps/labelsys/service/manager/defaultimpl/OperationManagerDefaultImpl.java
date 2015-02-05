@@ -353,9 +353,9 @@ public class OperationManagerDefaultImpl implements OperationManager
 		Set<Integer> labelSet = new HashSet<Integer>();
 		for(LabelInfo info : labels)
 		{
-			Label label;
 			if(info.getId() == null)
 			{
+				Label label;
 				if(info.getLabelName() == null || info.getModuleName() == null || info.getSystemName() == null)
 					throw new LabelNotFoundException();
 				System system = systemDAO.getByName(info.getSystemName());
@@ -365,12 +365,12 @@ public class OperationManagerDefaultImpl implements OperationManager
 				if(module == null)
 					throw new LabelNotFoundException();
 				label = labelDAO.getByName(module.getId(), info.getLabelName());
+				if(label == null)
+					throw new LabelNotFoundException();
+				labelSet.add(label.getId());
 			}
 			else
-				label = labelDAO.getById(info.getId());
-			if(label == null)
-				throw new LabelNotFoundException();
-			labelSet.add(label.getId());
+				labelSet.add(info.getId());
 		}
 		return labelSet;
 	}
@@ -404,39 +404,39 @@ public class OperationManagerDefaultImpl implements OperationManager
 	{
 		for(LabelInfo info : labelInfos)
 		{
-			Label label;
+			Integer labelId;
 			switch (info.getUsed())
 			{
 			case ADD:
-				label = getLabel(info);
-				if(labels.add(label.getId()) == false)
-					throw new IGNException("add label:{" + label + "} fail");
+				labelId = getLabelId(info);
+				if(labels.add(labelId) == false)
+					throw new IGNException("add label:{id:" + labelId + "} fail");
 				break;
 			case FADD:
-				label = getLabel(info);
-				labels.add(label.getId());
+				labelId = getLabelId(info);
+				labels.add(labelId);
 				break;
 			case FREMOVE:
-				label = getLabel(info);
-				labels.remove(label.getId());
+				labelId = getLabelId(info);
+				labels.remove(labelId);
 				break;
 			case REMOVE:
-				label = getLabel(info);
-				if(labels.remove(label.getId()) == false)
-					throw new IGNException("remove label:{" + label + "} fail");
+				labelId = getLabelId(info);
+				if(labels.remove(labelId) == false)
+					throw new IGNException("remove label:{id:" + labelId + "} fail");
 				break;
 			case TAKEBACK:
-				label = getLabel(info);
-				if(labels.contains(label.getId()))
-					labels.remove(label.getId());
+				labelId = getLabelId(info);
+				if(labels.contains(labelId))
+					labels.remove(labelId);
 				else
-					labels.add(label.getId());
+					labels.add(labelId);
 				break;
 			}
 		}
 	}
 	
-	private Label getLabel(LabelInfo info)
+	private Integer getLabelId(LabelInfo info)
 	{
 		Label label;
 		if(info.getId() == null)
@@ -450,12 +450,13 @@ public class OperationManagerDefaultImpl implements OperationManager
 			if(module == null)
 				throw new LabelNotFoundException();
 			label = labelDAO.getByName(module.getId(), info.getLabelName());
+			if(label == null)
+				throw new LabelNotFoundException();
+			return label.getId();
 		}
 		else
-			label = labelDAO.getById(info.getId());
-		if(label == null)
-			throw new LabelNotFoundException();
-		return label;
+			return info.getId();
+		
 	}
 	
 	private boolean check(String exp, Collection<Integer> labels)
