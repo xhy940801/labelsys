@@ -59,7 +59,7 @@ public interface EntityDAO {
 	public void delete(int entityId);
 	
 	/**
-	 * 删除n个entity
+	 * 删除n个实体
 	 * @param ids
 	 * @return 实际删除的数量
 	 */
