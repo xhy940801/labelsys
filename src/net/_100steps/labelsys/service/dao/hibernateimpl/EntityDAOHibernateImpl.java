@@ -110,10 +110,15 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		builder.append(-1);
 		try 
 		{
-			return sessionFactory.getCurrentSession()
+			int rs = sessionFactory.getCurrentSession()
 					.createQuery("delete from Entity as e where e.id in(?)")
 					.setString(0, builder.toString())
 					.executeUpdate();
+			sessionFactory.getCurrentSession()
+					.createQuery("delete from LabelEntityLinker as le where le.entityId in (?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+			return rs;
 		} catch (HibernateException e) {
 			throw new DAOException(e);
 		}

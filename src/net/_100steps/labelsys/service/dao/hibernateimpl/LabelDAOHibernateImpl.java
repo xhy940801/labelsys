@@ -114,10 +114,15 @@ public class LabelDAOHibernateImpl implements LabelDAO
 		builder.append(-1);
 		try
 		{
-			return sessionFactory.getCurrentSession()
+			int rs = sessionFactory.getCurrentSession()
 					.createQuery("delete from Label as l where l.id in (?)")
 					.setString(0, builder.toString())
 					.executeUpdate();
+			sessionFactory.getCurrentSession()
+					.createQuery("delete from LabelEntityLinker as le where le.labelId in (?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+			return rs;
 		}
 		catch (HibernateException e)
 		{
