@@ -17,7 +17,7 @@ public class ErrorMessage extends AbstractMessage
 	public ErrorMessage(int errorCode, Exception exception)
 	{
 		super(errorCode);
-		this.exception = exception;throw new RuntimeException(exception);
+		this.exception = exception;
 	}
 	
 	public Exception getException()
@@ -37,6 +37,12 @@ public class ErrorMessage extends AbstractMessage
 		CommonTree tree = new GeneralCommonTree();
 		tree.add(new GeneralNode("code", msgCode));
 		return tree;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return super.toString() + exception;
 	}
 
 }

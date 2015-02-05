@@ -1,7 +1,16 @@
 package net._100steps.labelsys.service.manager.defaultimpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import net._100steps.labelsys.service.dao.DAOException;
+import net._100steps.labelsys.service.dao.EntityDAO;
+import net._100steps.labelsys.service.dao.LabelDAO;
 import net._100steps.labelsys.service.dao.ModuleDAO;
+import net._100steps.labelsys.service.dao.OperationDAO;
+import net._100steps.labelsys.service.dao.RuleDAO;
 import net._100steps.labelsys.service.dao.SystemDAO;
 import net._100steps.labelsys.service.manager.ModuleManager;
 import net._100steps.labelsys.service.message.Message;
@@ -13,7 +22,12 @@ import net._100steps.labelsys.service.model.System;
 public class ModuleManagerDefaultImpl implements ModuleManager{
 	private ModuleDAO moduleDAO;
 	private SystemDAO systemDAO;
+	private OperationDAO operationDAO;
+	private RuleDAO ruleDAO;
+	private EntityDAO entityDAO;
+	private LabelDAO labelDAO;
 	@Override
+	@Transactional
 	public Message createModule(int systemId, String moduleName) {
 		// TODO Auto-generated method stub
 		try 
@@ -35,6 +49,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 	}
 
 	@Override
+	@Transactional
 	public Message createModule(String systemName, String moduleName) {
 		// TODO Auto-generated method stub
 		try 
@@ -56,6 +71,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 	}
 
 	@Override
+	@Transactional
 	public Message changeModule(int moduleId, String newModuleName) {
 		// TODO Auto-generated method stub
 		try 
@@ -73,6 +89,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 	}
 
 	@Override
+	@Transactional
 	public Message changeModule(String systemName, String oldModuleName,
 			String newModuleName) {
 		// TODO Auto-generated method stub
@@ -94,6 +111,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 	}
 
 	@Override
+	@Transactional
 	public Message deleteModule(int moduleId) {
 		// TODO Auto-generated method stub
 		try 
@@ -101,6 +119,21 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 			Module module = moduleDAO.getById(moduleId);
 			if(module==null)
 				return new ErrorMessage(306051);
+			List<Integer>modulesId = new ArrayList<Integer>();
+			modulesId.add(module.getId());
+			List<Integer>operationsId = operationDAO.findOperationsIdByModules(modulesId);
+			if(operationsId.size()!=0)
+			{
+				List<Integer>rulesId = ruleDAO.findRulesIdByOperations(operationsId);
+				if(rulesId.size()!=0)
+					ruleDAO.delete(rulesId);
+			}
+			List<Integer> entitiesId = entityDAO.findEntitiesIdByModules(modulesId);
+			if(entitiesId.size()!=0)
+				entityDAO.delete(entitiesId);
+			List<Integer> labelsId = labelDAO.findLabelsIdByModules(modulesId);
+			if(labelsId.size()!=0)
+				labelDAO.delete(labelsId);
 			moduleDAO.delete(module.getId());
 			return new ModuleMessage(module);
 		} catch (DAOException e) {
@@ -110,6 +143,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 	}
 
 	@Override
+	@Transactional
 	public Message deleteModule(String systemName, String moduleName) {
 		// TODO Auto-generated method stub
 		try 
@@ -120,6 +154,21 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 			Module module = moduleDAO.getByName(system.getId(), moduleName);
 			if(module==null)
 				return new ErrorMessage(306062);
+			List<Integer>modulesId = new ArrayList<Integer>();
+			modulesId.add(module.getId());
+			List<Integer>operationsId = operationDAO.findOperationsIdByModules(modulesId);
+			if(operationsId.size()!=0)
+			{
+				List<Integer>rulesId = ruleDAO.findRulesIdByOperations(operationsId);
+				if(rulesId.size()!=0)
+					ruleDAO.delete(rulesId);
+			}
+			List<Integer> entitiesId = entityDAO.findEntitiesIdByModules(modulesId);
+			if(entitiesId.size()!=0)
+				entityDAO.delete(entitiesId);
+			List<Integer> labelsId = labelDAO.findLabelsIdByModules(modulesId);
+			if(labelsId.size()!=0)
+				labelDAO.delete(labelsId);
 			moduleDAO.delete(module.getId());
 			return new ModuleMessage(module);
 		} catch (DAOException e) {
@@ -133,5 +182,16 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 	public void setSystemDAO(SystemDAO systemDAO) {
 		this.systemDAO = systemDAO;
 	}
-
+	public void setOperationDAO(OperationDAO operationDAO) {
+		this.operationDAO = operationDAO;
+	}
+	public void setRuleDAO(RuleDAO ruleDAO) {
+		this.ruleDAO = ruleDAO;
+	}
+	public void setEntityDAO(EntityDAO entityDAO) {
+		this.entityDAO = entityDAO;
+	}
+	public void setLabelDAO(LabelDAO labelDAO) {
+		this.labelDAO = labelDAO;
+	}
 }

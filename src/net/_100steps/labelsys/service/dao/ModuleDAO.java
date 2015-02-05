@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+
 import net._100steps.labelsys.service.model.Module;
 
 public interface ModuleDAO {
@@ -53,4 +54,24 @@ public interface ModuleDAO {
 	 * @param id
 	 */
 	public void delete(int id);
+	
+	/**
+	 * 删除n个实体
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
+	/**
+	 * 
+	 * @param systemId
+	 * @return 实际删除的数量
+	 */
+	public int deleteBySystems(List<Integer>systems);
+	
+	/**
+	 * 
+	 * @param systemsId
+	 * @return 
+	 */
+	public List<Integer> findModulesIdBySystems(List<Integer>systemsId);
 }

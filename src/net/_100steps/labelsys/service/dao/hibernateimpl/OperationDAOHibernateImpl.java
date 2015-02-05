@@ -1,6 +1,8 @@
 package net._100steps.labelsys.service.dao.hibernateimpl;
 
-import javax.transaction.Transactional;
+
+
+import java.util.List;
 
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.OperationDAO;
@@ -8,8 +10,8 @@ import net._100steps.labelsys.service.model.Operation;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 
 
@@ -47,13 +49,6 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	
 	private SessionFactory sessionFactory;
 	private QuickCache<Object, Operation> cache;
-	private CacheSynchronizer cacheSynchronizer;
-	
-	public OperationDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
-	{
-		this.cacheSynchronizer = cacheSynchronizer;
-	}
-
 	
 	@Override
 	@Transactional
@@ -122,7 +117,6 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 	@Transactional
 	public void delete(int id) {
 		cache.remove(id);
-		cacheSynchronizer.sendSignal("rule", "remove", id);
 		try {
 			int rs = sessionFactory.getCurrentSession()
 					.createQuery("delete from Operation as o where o.id = ?")
@@ -134,6 +128,47 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 		}
 	}
 	
+	@Override
+	@Transactional
+	public int delete(Iterable<Integer> ids) {
+		StringBuilder builder = new StringBuilder();
+		for(Integer id : ids)
+		{
+			cache.remove(id);
+			builder.append(id).append(',');
+		}
+		builder.append(-1);
+		try {
+			return sessionFactory.getCurrentSession()
+					.createQuery("delete from Operation as o where o.id in (?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+		} catch (HibernateException e) {
+			throw new DAOException(e);
+		}
+	}
+	@Override
+	@Transactional
+	public int deleteByModules(List<Integer>modulesId) {
+		try {
+			return (int)sessionFactory.getCurrentSession().createQuery("delete from Operation as o where o.moduleId in(:modulesId)").setParameterList("modulesId", modulesId).executeUpdate();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Integer> findOperationsIdByModules(List<Integer>modulesId) {
+		try
+		{
+			return (List<Integer>)sessionFactory.getCurrentSession().createQuery("select m.id from Operation as o where o.moduleId in(:modulesId)").setParameterList("modulesId", modulesId).list();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -146,15 +181,6 @@ public class OperationDAOHibernateImpl implements OperationDAO{
 					os[0] = value.getId();
 					os[1] = new OperationNameKey(value.getModuleId(), value.getName());
 					return os;
-				});
-		cacheSynchronizer.addCache(
-				cache,
-				"operation",
-				(curcache, signal, info)->{
-					if(signal.equals("clear"))
-						curcache.clear();
-					else if(signal.equals("remove"))
-						curcache.remove(info);
 				});
 	}
 

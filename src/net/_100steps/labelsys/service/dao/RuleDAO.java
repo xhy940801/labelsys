@@ -36,4 +36,23 @@ public interface RuleDAO
 	 * @return
 	 */
 	public List<Rule> getByOperationId(int id, Order order);
+	
+	/**
+	 * 删除
+	 * @param ids
+	 */
+	public void delete(int id);
+	
+	/**
+	 * 删除n个实体
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
+	/**
+	 * 
+	 * @param rulesId
+	 * @return
+	 */
+	public List<Integer> findRulesIdByOperations(List<Integer>operationsId);
 }

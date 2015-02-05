@@ -59,6 +59,13 @@ public interface EntityDAO {
 	public void delete(int entityId);
 	
 	/**
+	 * 删除n个实体
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
+	
+	/**
 	 * 根据id获得Entity
 	 * @param id
 	 * @return
@@ -81,11 +88,18 @@ public interface EntityDAO {
 	 * @param labelId
 	 * @return
 	 */
-	public Boolean hasLabel(int entityId,int labelId);
+	public boolean hasLabel(int entityId,int labelId);
 	/**
 	 * 
 	 * @param labelsId
 	 * @return
 	 */
 	public List<Entity> findEntitiesByLabels(List<Integer>labelsId);
+	
+	/**
+	 * 获取
+	 * @param modulesId
+	 * @return
+	 */
+	public List<Integer> findEntitiesIdByModules(List<Integer> modulesId);
 }

@@ -3,9 +3,10 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.EntityDAO;
@@ -90,6 +91,34 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 		{
 			if(sessionFactory.getCurrentSession().createQuery("delete from Entity as e where e.id = ?").setInteger(0, entityId).executeUpdate()==0)
 				throw new DAOException("记录不存在");
+			sessionFactory.getCurrentSession()
+					.createQuery("delete from LabelEntityLinker as le where le.entityId = ?")
+					.setInteger(0, entityId)
+					.executeUpdate();
+		} catch (HibernateException e) {
+			throw new DAOException(e);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public int delete(Iterable<Integer> ids)
+	{
+		StringBuilder builder = new StringBuilder();
+		for(Integer id : ids)
+			builder.append(id).append(',');
+		builder.append(-1);
+		try 
+		{
+			int rs = sessionFactory.getCurrentSession()
+					.createQuery("delete from Entity as e where e.id in(?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+			sessionFactory.getCurrentSession()
+					.createQuery("delete from LabelEntityLinker as le where le.entityId in (?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+			return rs;
 		} catch (HibernateException e) {
 			throw new DAOException(e);
 		}
@@ -122,11 +151,11 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	}
 	@Override
 	@Transactional
-	public Boolean hasLabel(int entityId,int labelId) {
+	public boolean hasLabel(int entityId,int labelId) {
 		try {
 			if (sessionFactory.getCurrentSession().createQuery("from LabelEntityLinker as le where le.entityId=? and le.labelId=?").setInteger(0, entityId).setInteger(1, labelId).uniqueResult()==null) 
-				return Boolean.FALSE;
-			return Boolean.TRUE;
+				return false;
+			return true;
 		} catch (HibernateException e) {
 			// TODO: handle exception
 			throw new DAOException(e);
@@ -147,6 +176,25 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 			throw new DAOException(e);
 		}
 		
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Integer> findEntitiesIdByModules(List<Integer> modulesId)
+	{
+		try
+		{
+			return (List<Integer>) sessionFactory
+					.getCurrentSession()
+					.createQuery(
+							"select m.id from Entity as e where e.moduleId in(:modulesId)")
+					.setParameterList("modulesId", modulesId).list();
+		}
+		catch (HibernateException e)
+		{
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
 	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;

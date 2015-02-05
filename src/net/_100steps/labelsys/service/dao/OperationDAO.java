@@ -1,5 +1,7 @@
 package net._100steps.labelsys.service.dao;
 
+import java.util.List;
+
 import net._100steps.labelsys.service.model.Operation;
 
 public interface OperationDAO {
@@ -35,5 +37,28 @@ public interface OperationDAO {
 	 */
 	public Operation getByName(int moduleId, String name);
 	
+	/**
+	 * 删除
+	 * @param id
+	 */
 	public void delete(int id);
+	
+	/**
+	 * 删除n个实体
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
+	/**
+	 * 
+	 * @param modulesId
+	 * @return 实际删除的数量
+	 */
+	public int deleteByModules(List<Integer>modulesId);
+	/**
+	 * 
+	 * @param modulesId
+	 * @return
+	 */
+	public List<Integer> findOperationsIdByModules(List<Integer>modulesId);
 }

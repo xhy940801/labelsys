@@ -1,17 +1,33 @@
 package net._100steps.labelsys.service.manager.defaultimpl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+
 import net._100steps.labelsys.service.dao.DAOException;
+import net._100steps.labelsys.service.dao.EntityDAO;
 import net._100steps.labelsys.service.dao.LabelDAO;
 import net._100steps.labelsys.service.dao.ModuleDAO;
 import net._100steps.labelsys.service.dao.OperationDAO;
+import net._100steps.labelsys.service.dao.RuleDAO;
 import net._100steps.labelsys.service.dao.SystemDAO;
+import net._100steps.labelsys.service.entity.EntityInfo;
+import net._100steps.labelsys.service.entity.LabelInfo;
+import net._100steps.labelsys.service.entity.OperationInfo;
 import net._100steps.labelsys.service.manager.OperationManager;
 import net._100steps.labelsys.service.message.Message;
 import net._100steps.labelsys.service.message.impl.ErrorMessage;
 import net._100steps.labelsys.service.message.impl.GeneralMessage;
 import net._100steps.labelsys.service.message.impl.OperationMessage;
+import net._100steps.labelsys.service.message.impl.RuleMessage;
+import net._100steps.labelsys.service.model.Entity;
+import net._100steps.labelsys.service.model.Label;
 import net._100steps.labelsys.service.model.Module;
 import net._100steps.labelsys.service.model.Operation;
+import net._100steps.labelsys.service.model.Rule;
 import net._100steps.labelsys.service.model.System;
 
 public class OperationManagerDefaultImpl implements OperationManager
@@ -20,6 +36,8 @@ public class OperationManagerDefaultImpl implements OperationManager
 	private ModuleDAO moduleDAO;
 	private OperationDAO operationDAO;
 	private LabelDAO labelDAO;
+	private RuleDAO ruleDAO;
+	private EntityDAO entityDAO;
 
 	@Override
 	public Message createOperation(int moduleId, String name)
@@ -127,6 +145,14 @@ public class OperationManagerDefaultImpl implements OperationManager
 	{
 		try
 		{
+			Operation operation = operationDAO.getById(operationId);
+			if(operation==null)
+				return new ErrorMessage(303051);
+			List<Integer>operationsId = new ArrayList<Integer>();
+			operationsId.add(operation.getId());
+			List<Integer>rulesId =ruleDAO.findRulesIdByOperations(operationsId);
+			if(rulesId.size()!=0)
+				ruleDAO.delete(operationsId);
 			operationDAO.delete(operationId);
 			return new GeneralMessage(0, null);
 		}
@@ -155,6 +181,11 @@ public class OperationManagerDefaultImpl implements OperationManager
 			Operation operation = operationDAO.getByName(module.getId(), operationName);
 			if(operation == null)
 				return new ErrorMessage(303063);
+			List<Integer>operationsId = new ArrayList<Integer>();
+			operationsId.add(operation.getId());
+			List<Integer>rulesId =ruleDAO.findRulesIdByOperations(operationsId);
+			if(rulesId.size()!=0)
+				ruleDAO.delete(operationsId);
 			operationDAO.delete(operation.getId());
 			return new OperationMessage(operation);
 		}
@@ -165,6 +196,117 @@ public class OperationManagerDefaultImpl implements OperationManager
 		catch (RuntimeException e)
 		{
 			return new ErrorMessage(503061);
+		}
+	}
+	
+	private class OperationNotFoundException extends RuntimeException
+	{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4018573355498335166L;
+	}
+	
+	private class EntityNotFoundException extends RuntimeException
+	{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -8318400485632084322L;
+	}
+	
+	private class LabelNotFoundException extends RuntimeException
+	{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -304249833948369225L;
+	}
+	
+	private class IGNException extends RuntimeException
+	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8674305487558450031L;
+
+		IGNException(String msg)
+		{
+			super(msg);
+		}
+	}
+	
+	@Override
+	public Message checkPermission(OperationInfo operationInfo,
+			Iterable<LabelInfo> labelInfos)
+	{
+		try
+		{
+			Iterable<Rule> rules = this.getOperationRules(operationInfo, RuleDAO.Order.CREATEDDESC);
+			Collection<Integer> labels = this.getLabels(labelInfos);
+			for(Rule rule : rules)
+				if(this.check(rule.getExp(), labels))
+					return new RuleMessage(rule);
+			return new GeneralMessage(0, null);
+		}
+		catch (LabelNotFoundException e)
+		{
+			return new ErrorMessage(303071, e);
+		}
+		catch (OperationNotFoundException e)
+		{
+			return new ErrorMessage(303072, e);
+		}
+		catch (DAOException e)
+		{
+			return new ErrorMessage(403071);
+		}
+		catch (RuntimeException e)
+		{
+			return new ErrorMessage(503071);
+		}
+	}
+
+	@Override
+	public Message checkPermission(OperationInfo operationInfo,
+			EntityInfo entityInfo, Iterable<LabelInfo> labelInfos)
+	{
+		try
+		{
+			Iterable<Rule> rules = this.getOperationRules(operationInfo, RuleDAO.Order.CREATEDDESC);
+			Set<Integer> labels = this.getEntityLabels(entityInfo);
+			this.combine(labelInfos, labels);
+			for(Rule rule : rules)
+				if(this.check(rule.getExp(), labels))
+					return new RuleMessage(rule);
+			return new GeneralMessage(0, null);
+		}
+		catch (LabelNotFoundException e)
+		{
+			return new ErrorMessage(303081, e);
+		}
+		catch (OperationNotFoundException e)
+		{
+			return new ErrorMessage(303082, e);
+		}
+		catch (EntityNotFoundException e)
+		{
+			return new ErrorMessage(303083, e);
+		}
+		catch (IGNException e)
+		{
+			return new ErrorMessage(303084, e);
+		}
+		catch (DAOException e)
+		{
+			return new ErrorMessage(403081);
+		}
+		catch (RuntimeException e)
+		{
+			return new ErrorMessage(503081);
 		}
 	}
 	
@@ -186,6 +328,175 @@ public class OperationManagerDefaultImpl implements OperationManager
 	public void setLabelDAO(LabelDAO labelDAO)
 	{
 		this.labelDAO = labelDAO;
+	}
+	
+	public void setRuleDAO(RuleDAO ruleDAO)
+	{
+		this.ruleDAO = ruleDAO;
+	}
+
+	public void setEntityDAO(EntityDAO entityDAO)
+	{
+		this.entityDAO = entityDAO;
+	}
+
+	private Iterable<Rule> getOperationRules(OperationInfo info, RuleDAO.Order order)
+	{
+		Operation operation;
+		if(info.getId() == null)
+		{
+			if(info.getSystemName() == null || info.getModuleName() == null || info.getOperationName() == null)
+				throw new OperationNotFoundException();
+			System system = systemDAO.getByName(info.getSystemName());
+			if(system == null)
+				throw new OperationNotFoundException();
+			Module module = moduleDAO.getByName(system.getId(), info.getModuleName());
+			if(module == null)
+				throw new OperationNotFoundException();
+			operation = operationDAO.getByName(module.getId(), info.getOperationName());
+		}
+		else
+			operation = operationDAO.getById(info.getId());
+		if(operation == null)
+			throw new OperationNotFoundException();
+		return ruleDAO.getByOperationId(operation.getId(), order);
+	}
+	
+	private Collection<Integer> getLabels(Iterable<LabelInfo> labels)
+	{
+		Set<Integer> labelSet = new HashSet<Integer>();
+		for(LabelInfo info : labels)
+		{
+			if(info.getId() == null)
+			{
+				Label label;
+				if(info.getLabelName() == null || info.getModuleName() == null || info.getSystemName() == null)
+					throw new LabelNotFoundException();
+				System system = systemDAO.getByName(info.getSystemName());
+				if(system == null)
+					throw new LabelNotFoundException();
+				Module module = moduleDAO.getByName(system.getId(), info.getModuleName());
+				if(module == null)
+					throw new LabelNotFoundException();
+				label = labelDAO.getByName(module.getId(), info.getLabelName());
+				if(label == null)
+					throw new LabelNotFoundException();
+				labelSet.add(label.getId());
+			}
+			else
+				labelSet.add(info.getId());
+		}
+		return labelSet;
+	}
+	
+	private Set<Integer> getEntityLabels(EntityInfo info)
+	{
+		Entity entity;
+		if(info.getId() == null)
+		{
+			if(info.getForeignKey() == null || info.getModuleName() == null || info.getSystemName() == null)
+				throw new EntityNotFoundException();
+			System system = systemDAO.getByName(info.getSystemName());
+			if(system == null)
+				throw new EntityNotFoundException();
+			Module module = moduleDAO.getByName(system.getId(), info.getModuleName());
+			if(module == null)
+				throw new EntityNotFoundException();
+			entity = entityDAO.getByForeignKey(module.getId(), info.getForeignKey());
+		}
+		else
+			entity = entityDAO.getById(info.getId());
+		if(entity == null)
+			throw new EntityNotFoundException();
+		List<Label> labelList = labelDAO.getByEntityId(entity.getId());
+		Set<Integer> intSet = new HashSet<Integer>();
+		labelList.forEach((value)->intSet.add(value.getId()));
+		return intSet;
+	}
+	
+	private void combine(Iterable<LabelInfo> labelInfos, Set<Integer> labels)
+	{
+		for(LabelInfo info : labelInfos)
+		{
+			Integer labelId;
+			switch (info.getUsed())
+			{
+			case ADD:
+				labelId = getLabelId(info);
+				if(labels.add(labelId) == false)
+					throw new IGNException("add label:{id:" + labelId + "} fail");
+				break;
+			case FADD:
+				labelId = getLabelId(info);
+				labels.add(labelId);
+				break;
+			case FREMOVE:
+				labelId = getLabelId(info);
+				labels.remove(labelId);
+				break;
+			case REMOVE:
+				labelId = getLabelId(info);
+				if(labels.remove(labelId) == false)
+					throw new IGNException("remove label:{id:" + labelId + "} fail");
+				break;
+			case TAKEBACK:
+				labelId = getLabelId(info);
+				if(labels.contains(labelId))
+					labels.remove(labelId);
+				else
+					labels.add(labelId);
+				break;
+			}
+		}
+	}
+	
+	private Integer getLabelId(LabelInfo info)
+	{
+		Label label;
+		if(info.getId() == null)
+		{
+			if(info.getLabelName() == null || info.getModuleName() == null || info.getSystemName() == null)
+				throw new LabelNotFoundException();
+			System system = systemDAO.getByName(info.getSystemName());
+			if(system == null)
+				throw new LabelNotFoundException();
+			Module module = moduleDAO.getByName(system.getId(), info.getModuleName());
+			if(module == null)
+				throw new LabelNotFoundException();
+			label = labelDAO.getByName(module.getId(), info.getLabelName());
+			if(label == null)
+				throw new LabelNotFoundException();
+			return label.getId();
+		}
+		else
+			return info.getId();
+		
+	}
+	
+	private boolean check(String exp, Collection<Integer> labels)
+	{
+		String[] subexps = exp.split(",");
+		Stack<Boolean> stack = new Stack<>();
+		for(String se : subexps)
+		{
+			switch (se)
+			{
+			case "!":
+				stack.push(!stack.pop());
+				break;
+			case "&":
+				stack.push(stack.pop() && stack.pop());
+				break;
+			case "|":
+				stack.push(stack.pop() || stack.pop());
+				break;
+			default:
+				Integer res = Integer.valueOf(se);
+				stack.push(labels.contains(res));
+				break;
+			}
+		}
+		return stack.pop();
 	}
 
 }

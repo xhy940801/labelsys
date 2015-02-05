@@ -2,6 +2,10 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 
 import java.util.List;
 
+
+
+
+
 import javax.transaction.Transactional;
 
 import net._100steps.labelsys.service.dao.DAOException;
@@ -11,7 +15,6 @@ import net._100steps.labelsys.service.model.Rule;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
-import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 /**
  * @author xiao
@@ -20,12 +23,6 @@ public class RuleDAOHibernateImpl implements RuleDAO
 {
 	private SessionFactory sessionFactory;
 	private QuickCache<Integer, List<Rule>> cacheByOperationId;
-	private CacheSynchronizer cacheSynchronizer;
-	
-	public RuleDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
-	{
-		this.cacheSynchronizer = cacheSynchronizer;
-	}
 
 	@Override
 	@Transactional
@@ -101,7 +98,66 @@ public class RuleDAOHibernateImpl implements RuleDAO
 			throw new DAOException(e);
 		}
 	}
-
+	
+	@Override
+	@Transactional
+	public void delete(int id)
+	{
+		try
+		{
+			Rule rule = (Rule) sessionFactory.getCurrentSession().get(Rule.class, id);
+			if(rule == null)
+				throw new DAOException("记录不存在");
+			cacheByOperationId.remove(rule.getOperationId());
+			sessionFactory.getCurrentSession().delete(rule);
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public int delete(Iterable<Integer> ids)
+	{
+		StringBuilder builder = new StringBuilder();
+		for(Integer id : ids)
+			builder.append(id).append(',');
+		builder.append(-1);
+		try
+		{
+			@SuppressWarnings("unchecked")
+			List<Rule> rules = sessionFactory.getCurrentSession()
+					.createQuery("from Rule as r where r.id in (?)")
+					.setString(0, builder.toString())
+					.list();
+			for(Rule rule : rules)
+				cacheByOperationId.remove(rule.getOperationId());
+			return sessionFactory.getCurrentSession()
+					.createQuery("delete from Rule as r where r.id in (?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> findRulesIdByOperations(List<Integer>operationsId)
+	{
+		try
+		{
+			List<Integer> resultsIntegers = (List<Integer>)sessionFactory.getCurrentSession().createQuery("select new Integer(id) from Rule  where operationId in(:operationsId)").setParameterList("operationsId", operationsId).list();
+			return resultsIntegers;
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+		
+	}
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		this.sessionFactory = sessionFactory;
@@ -110,22 +166,6 @@ public class RuleDAOHibernateImpl implements RuleDAO
 	public void setCacheByOperationId(QuickCache<Integer, List<Rule>> cacheByOperationId)
 	{
 		this.cacheByOperationId = cacheByOperationId;
-		cacheSynchronizer.addCache(
-				cacheByOperationId,
-				"rule",
-				(curcache, signal, info)->
-				{
-					if(signal.equals("clear"))
-						curcache.clear();
-					else if(signal.equals("remove"))
-						curcache.remove(info);
-				}
-			);
-	}
-
-	public void setCacheSynchronizer(CacheSynchronizer cacheSynchronizer)
-	{
-		this.cacheSynchronizer = cacheSynchronizer;
 	}
 
 }
