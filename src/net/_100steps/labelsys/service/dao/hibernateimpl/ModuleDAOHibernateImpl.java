@@ -127,6 +127,7 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 		{
 			int rs = sessionFactory.getCurrentSession()
 					.createQuery("delete from Module as s where s.id=?")
+					.setInteger(0, id)
 					.executeUpdate();
 			if(rs == 0)
 				throw new DAOException("记录不存在");
