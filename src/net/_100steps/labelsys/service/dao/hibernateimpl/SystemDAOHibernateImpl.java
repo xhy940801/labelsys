@@ -12,7 +12,6 @@ import net._100steps.labelsys.service.model.System;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
-import com.xiao.util.quickcache.CacheSynchronizer;
 import com.xiao.util.quickcache.QuickCache;
 
 /**
@@ -23,12 +22,6 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	private SessionFactory sessionFactory;
 	private QuickCache<Object, System> cache;
 	private SoftReference<List<System>> refSystems;
-	private CacheSynchronizer cacheSynchronizer;
-	
-	public SystemDAOHibernateImpl(CacheSynchronizer cacheSynchronizer)
-	{
-		this.cacheSynchronizer = cacheSynchronizer;
-	}
 
 	@Override
 	@Transactional
@@ -141,7 +134,6 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	public void delete(int id)
 	{
 		cache.remove(id);
-		cacheSynchronizer.sendSignal("module", "clear", null);
 		try
 		{
 			int rs = sessionFactory.getCurrentSession()
@@ -149,6 +141,29 @@ public class SystemDAOHibernateImpl implements SystemDAO
 					.executeUpdate();
 			if(rs == 0)
 				throw new DAOException("记录不存在");
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public int delete(Iterable<Integer> ids)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (Integer id : ids)
+		{
+			cache.remove(id);
+			builder.append(id).append(',');
+		}
+		builder.append(-1);
+		try
+		{
+			return sessionFactory.getCurrentSession()
+					.createQuery("delete from System as o where o.id in (?)")
+					.setString(0, builder.toString()).executeUpdate();
 		}
 		catch (HibernateException e)
 		{
@@ -164,17 +179,6 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	public void setCache(QuickCache<Object, System> cache)
 	{
 		this.cache = cache;
-		cacheSynchronizer.addCache(
-				cache,
-				"system",
-				(curcache, signal, info)->
-				{
-					if(signal.equals("clear"))
-						curcache.clear();
-					else if(signal.equals("remove"))
-						curcache.remove(info);
-				}
-			);
 	}
 
 }

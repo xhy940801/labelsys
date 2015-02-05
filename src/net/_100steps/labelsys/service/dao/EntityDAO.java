@@ -59,6 +59,13 @@ public interface EntityDAO {
 	public void delete(int entityId);
 	
 	/**
+	 * 删除n个entity
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
+	
+	/**
 	 * 根据id获得Entity
 	 * @param id
 	 * @return

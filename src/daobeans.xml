@@ -16,10 +16,6 @@
 		scope="prototype">
 	</bean>
 	
-	<bean id="cacheSynchronizer"
-		class="com.xiao.util.quickcache.ConcurrentCacheSynchronizer">
-	</bean>
-	
 	<bean id="entityDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.EntityDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
@@ -32,28 +28,24 @@
 	
 	<bean id="moduleDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.ModuleDAOHibernateImpl">
-		<constructor-arg name="cacheSynchronizer" ref="cacheSynchronizer"></constructor-arg>
 		<property name="sessionFactory" ref="sessionFactory"></property>
 		<property name="cache" ref="quickCache"></property>
 	</bean>
 	
 	<bean id="operationDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.OperationDAOHibernateImpl">
-		<constructor-arg name="cacheSynchronizer" ref="cacheSynchronizer"></constructor-arg>
 		<property name="sessionFactory" ref="sessionFactory"></property>
 		<property name="cache" ref="quickCache"></property>
 	</bean>
 	
 	<bean id="ruleDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.RuleDAOHibernateImpl">
-		<constructor-arg name="cacheSynchronizer" ref="cacheSynchronizer"></constructor-arg>
 		<property name="sessionFactory" ref="sessionFactory"></property>
 		<property name="cacheByOperationId" ref="quickCache"></property>
 	</bean>
 	
 	<bean id="systemDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.SystemDAOHibernateImpl">
-		<constructor-arg name="cacheSynchronizer" ref="cacheSynchronizer"></constructor-arg>
 		<property name="sessionFactory" ref="sessionFactory"></property>
 		<property name="cache" ref="quickCache"></property>
 	</bean>

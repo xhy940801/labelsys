@@ -59,6 +59,27 @@ public class LabelDAOHibernateImpl implements LabelDAO
 			throw new DAOException(e);
 		}
 	}
+	
+	@Override
+	@Transactional
+	public int delete(Iterable<Integer> ids)
+	{
+		StringBuilder builder = new StringBuilder();
+		for(Integer id : ids)
+			builder.append(id).append(',');
+		builder.append(-1);
+		try
+		{
+			return sessionFactory.getCurrentSession()
+					.createQuery("delete from Label as l where l.id in (?)")
+					.setString(0, builder.toString())
+					.executeUpdate();
+		}
+		catch (HibernateException e)
+		{
+			throw new DAOException(e);
+		}
+	}
 
 	@Override
 	@Transactional

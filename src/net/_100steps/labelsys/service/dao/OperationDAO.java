@@ -35,5 +35,16 @@ public interface OperationDAO {
 	 */
 	public Operation getByName(int moduleId, String name);
 	
+	/**
+	 * 删除
+	 * @param id
+	 */
 	public void delete(int id);
+	
+	/**
+	 * 删除n个实体
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
 }

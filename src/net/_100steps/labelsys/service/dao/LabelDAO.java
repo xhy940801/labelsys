@@ -28,6 +28,13 @@ public interface LabelDAO
 	public void delete(int id);
 	
 	/**
+	 * 删除n个实体
+	 * @param ids
+	 * @return 实际删除的数量
+	 */
+	public int delete(Iterable<Integer> ids);
+	
+	/**
 	 * 通过id获取记录
 	 * @param id 要获取的记录的id
 	 * @return 如果找到,则返回实体,如果没找到,则返回null
