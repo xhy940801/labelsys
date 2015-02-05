@@ -22,6 +22,7 @@
 		<property name="labelDAO" ref="labelDAO"></property>
 		<property name="moduleDAO" ref="moduleDAO"></property>
 		<property name="entityDAO" ref="entityDAO"></property>
+		<property name="systemDAO" ref="systemDAO"></property>
 	</bean>
 
 </beans>
