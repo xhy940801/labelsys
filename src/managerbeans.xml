@@ -28,7 +28,12 @@
 	
 	<bean id="systemManager"
 		class="net._100steps.labelsys.service.manager.defaultimpl.SystemManagerDefaultImpl">
+		<property name="labelDAO" ref="labelDAO"></property>
+		<property name="moduleDAO" ref="moduleDAO"></property>
 		<property name="systemDAO" ref="systemDAO"></property>
+		<property name="operationDAO" ref="operationDAO"></property>
+		<property name="ruleDAO" ref="ruleDAO"></property>
+		<property name="entityDAO" ref="entityDAO"></property>
 	</bean>
 	
 	<bean id="ruleManager"
@@ -52,8 +57,12 @@
 	
 	<bean id="moduleManager"
 		class="net._100steps.labelsys.service.manager.defaultimpl.ModuleManagerDefaultImpl">
+		<property name="labelDAO" ref="labelDAO"></property>
 		<property name="moduleDAO" ref="moduleDAO"></property>
 		<property name="systemDAO" ref="systemDAO"></property>
+		<property name="operationDAO" ref="operationDAO"></property>
+		<property name="ruleDAO" ref="ruleDAO"></property>
+		<property name="entityDAO" ref="entityDAO"></property>
 	</bean>
 
 </beans>

@@ -102,21 +102,17 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 	
 	@Override
 	@Transactional
-	public int delete(Iterable<Integer> ids)
+	public int delete(List<Integer> ids)
 	{
-		StringBuilder builder = new StringBuilder();
-		for(Integer id : ids)
-			builder.append(id).append(',');
-		builder.append(-1);
 		try 
 		{
 			int rs = sessionFactory.getCurrentSession()
-					.createQuery("delete from Entity as e where e.id in(?)")
-					.setString(0, builder.toString())
+					.createQuery("delete from Entity as e where e.id in(:ids)")
+					.setParameterList("ids", ids)
 					.executeUpdate();
 			sessionFactory.getCurrentSession()
-					.createQuery("delete from LabelEntityLinker as le where le.entityId in (?)")
-					.setString(0, builder.toString())
+					.createQuery("delete from LabelEntityLinker as le where le.entityId in (:entitiesId)")
+					.setParameterList("entitiesId", ids)
 					.executeUpdate();
 			return rs;
 		} catch (HibernateException e) {
@@ -187,7 +183,7 @@ public class EntityDAOHibernateImpl implements EntityDAO{
 			return (List<Integer>) sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"select m.id from Entity as e where e.moduleId in(:modulesId)")
+							"select e.id from Entity as e where e.moduleId in(:modulesId)")
 					.setParameterList("modulesId", modulesId).list();
 		}
 		catch (HibernateException e)

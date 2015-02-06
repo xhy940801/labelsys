@@ -2,6 +2,12 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 
 import java.util.List;
 
+
+
+
+
+
+
 import javax.transaction.Transactional;
 
 import net._100steps.labelsys.service.dao.DAOException;
@@ -115,24 +121,20 @@ public class RuleDAOHibernateImpl implements RuleDAO
 	
 	@Override
 	@Transactional
-	public int delete(Iterable<Integer> ids)
+	public int delete(List<Integer> ids)
 	{
-		StringBuilder builder = new StringBuilder();
-		for(Integer id : ids)
-			builder.append(id).append(',');
-		builder.append(-1);
 		try
 		{
 			@SuppressWarnings("unchecked")
 			List<Rule> rules = sessionFactory.getCurrentSession()
-					.createQuery("from Rule as r where r.id in (?)")
-					.setString(0, builder.toString())
+					.createQuery("from Rule as r where r.id in (:ids)")
+					.setParameterList("ids", ids)
 					.list();
 			for(Rule rule : rules)
 				cacheByOperationId.remove(rule.getOperationId());
 			return sessionFactory.getCurrentSession()
-					.createQuery("delete from Rule as r where r.id in (?)")
-					.setString(0, builder.toString())
+					.createQuery("delete from Rule as r where r.id in (:ids)")
+					.setParameterList("ids", ids)
 					.executeUpdate();
 		}
 		catch (HibernateException e)
@@ -141,6 +143,23 @@ public class RuleDAOHibernateImpl implements RuleDAO
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Integer> findRulesIdByOperations(List<Integer>operationsId)
+	{
+		try
+		{
+			List<Integer> rulesId =sessionFactory.getCurrentSession()
+					.createQuery("select r.id from Rule as r where r.operationId in(:operationsId)").setParameterList("operationsId", operationsId).list();
+			return rulesId;
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DAOException(e);
+		}
+		
+	}
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		this.sessionFactory = sessionFactory;

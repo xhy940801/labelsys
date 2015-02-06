@@ -24,6 +24,7 @@
 	<bean id="labelDAO"
 		class="net._100steps.labelsys.service.dao.hibernateimpl.LabelDAOHibernateImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="cache" ref="quickCache"></property>
 	</bean>
 	
 	<bean id="moduleDAO"

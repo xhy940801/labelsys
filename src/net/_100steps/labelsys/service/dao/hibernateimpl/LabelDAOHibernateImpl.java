@@ -12,6 +12,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import com.xiao.util.quickcache.QuickCache;
+
+
+
+
 /**
  * @author xiao
  */
@@ -103,24 +107,22 @@ public class LabelDAOHibernateImpl implements LabelDAO
 	
 	@Override
 	@Transactional
-	public int delete(Iterable<Integer> ids)
+	public int delete(List<Integer> ids)
 	{
-		StringBuilder builder = new StringBuilder();
 		for(Integer id : ids)
 		{
 			cache.remove(id);
-			builder.append(id).append(',');
 		}
-		builder.append(-1);
+
 		try
 		{
 			int rs = sessionFactory.getCurrentSession()
-					.createQuery("delete from Label as l where l.id in (?)")
-					.setString(0, builder.toString())
+					.createQuery("delete from Label as l where l.id in (:ids)")
+					.setParameterList("ids", ids)
 					.executeUpdate();
 			sessionFactory.getCurrentSession()
-					.createQuery("delete from LabelEntityLinker as le where le.labelId in (?)")
-					.setString(0, builder.toString())
+					.createQuery("delete from LabelEntityLinker as le where le.labelId in (:ids)")
+					.setParameterList("ids", ids)
 					.executeUpdate();
 			return rs;
 		}
@@ -202,7 +204,7 @@ public class LabelDAOHibernateImpl implements LabelDAO
 			return (List<Integer>) sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"select m.id from Label as l where l.moduleId in(:modulesId)")
+							"select l.id from Label as l where l.moduleId in(:modulesId)")
 					.setParameterList("modulesId", modulesId).list();
 		}
 		catch (HibernateException e)

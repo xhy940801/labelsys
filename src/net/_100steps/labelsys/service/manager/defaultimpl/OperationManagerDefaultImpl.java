@@ -1,5 +1,6 @@
 package net._100steps.labelsys.service.manager.defaultimpl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -144,6 +145,14 @@ public class OperationManagerDefaultImpl implements OperationManager
 	{
 		try
 		{
+			Operation operation = operationDAO.getById(operationId);
+			if(operation==null)
+				return new ErrorMessage(303051);
+			List<Integer>operationsId = new ArrayList<Integer>();
+			operationsId.add(operation.getId());
+			List<Integer>rulesId =ruleDAO.findRulesIdByOperations(operationsId);
+			if(rulesId.size()!=0)
+				ruleDAO.delete(operationsId);
 			operationDAO.delete(operationId);
 			return new GeneralMessage(0, null);
 		}
@@ -172,6 +181,11 @@ public class OperationManagerDefaultImpl implements OperationManager
 			Operation operation = operationDAO.getByName(module.getId(), operationName);
 			if(operation == null)
 				return new ErrorMessage(303063);
+			List<Integer>operationsId = new ArrayList<Integer>();
+			operationsId.add(operation.getId());
+			List<Integer>rulesId =ruleDAO.findRulesIdByOperations(operationsId);
+			if(rulesId.size()!=0)
+				ruleDAO.delete(operationsId);
 			operationDAO.delete(operation.getId());
 			return new OperationMessage(operation);
 		}

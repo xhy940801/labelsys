@@ -151,20 +151,17 @@ public class SystemDAOHibernateImpl implements SystemDAO
 	
 	@Override
 	@Transactional
-	public int delete(Iterable<Integer> ids)
+	public int delete(List<Integer> ids)
 	{
-		StringBuilder builder = new StringBuilder();
 		for (Integer id : ids)
 		{
 			cache.remove(id);
-			builder.append(id).append(',');
 		}
-		builder.append(-1);
 		try
 		{
 			return sessionFactory.getCurrentSession()
-					.createQuery("delete from System as o where o.id in (?)")
-					.setString(0, builder.toString()).executeUpdate();
+					.createQuery("delete from System as s where s.id in (:ids)")
+					.setParameterList("ids", ids).executeUpdate();
 		}
 		catch (HibernateException e)
 		{

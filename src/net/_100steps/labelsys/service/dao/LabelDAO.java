@@ -32,7 +32,7 @@ public interface LabelDAO
 	 * @param ids
 	 * @return 实际删除的数量
 	 */
-	public int delete(Iterable<Integer> ids);
+	public int delete(List<Integer> ids);
 	
 	/**
 	 * 通过id获取记录

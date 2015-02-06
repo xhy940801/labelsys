@@ -2,7 +2,9 @@ package net._100steps.labelsys.service.dao.hibernateimpl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+
+
+
 
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.ModuleDAO;
@@ -10,6 +12,7 @@ import net._100steps.labelsys.service.model.Module;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiao.util.quickcache.QuickCache;
 
@@ -140,27 +143,47 @@ public class ModuleDAOHibernateImpl implements ModuleDAO{
 	
 	@Override
 	@Transactional
-	public int delete(Iterable<Integer> ids)
+	public int delete(List<Integer> ids)
 	{
-		StringBuilder builder = new StringBuilder();
 		for (Integer id : ids)
 		{
 			cache.remove(id);
-			builder.append(id).append(',');
 		}
-		builder.append(-1);
 		try
 		{
 			return sessionFactory.getCurrentSession()
-					.createQuery("delete from Module as o where o.id in (?)")
-					.setString(0, builder.toString()).executeUpdate();
+					.createQuery("delete from Module as m where m.id in (:ids)")
+					.setParameterList("ids", ids).executeUpdate();
 		}
 		catch (HibernateException e)
 		{
 			throw new DAOException(e);
 		}
 	}
-	
+	@Override
+	@Transactional
+	public int deleteBySystems(List<Integer>systemsId)
+	{
+		try 
+		{
+			return (int)sessionFactory.getCurrentSession().createQuery("delete from Module as m where m.systemId in(:systemsId)").setParameterList("systemsId", systemsId).executeUpdate();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Integer> findModulesIdBySystems(List<Integer>systemsId) {
+		try
+		{
+			return (List<Integer>)sessionFactory.getCurrentSession().createQuery("select m.id from Module as m where m.systemId in(:systemsId)").setParameterList("systemsId", systemsId).list();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			throw new DAOException(e);
+		}
+	}
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory  = sessionFactory;
 	}

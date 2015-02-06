@@ -50,5 +50,5 @@ public interface SystemDAO
 	 * @param ids
 	 * @return 实际删除的数量
 	 */
-	public int delete(Iterable<Integer> ids);
+	public int delete(List<Integer> ids);
 }

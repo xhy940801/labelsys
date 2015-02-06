@@ -60,5 +60,18 @@ public interface ModuleDAO {
 	 * @param ids
 	 * @return 实际删除的数量
 	 */
-	public int delete(Iterable<Integer> ids);
+	public int delete(List<Integer> ids);
+	/**
+	 * 
+	 * @param systemId
+	 * @return 实际删除的数量
+	 */
+	public int deleteBySystems(List<Integer>systems);
+	
+	/**
+	 * 
+	 * @param systemsId
+	 * @return 
+	 */
+	public List<Integer> findModulesIdBySystems(List<Integer>systemsId);
 }
