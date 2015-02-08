@@ -82,6 +82,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 			Module module = moduleDAO.getById(moduleId);
 			if(module == null)
 				return new ErrorMessage(306031);
+			module = new Module(module);
 			module.setName(newModuleName);
 			moduleDAO.update(module);
 			return new ModuleMessage(module);
@@ -104,6 +105,7 @@ public class ModuleManagerDefaultImpl implements ModuleManager{
 			Module module = moduleDAO.getByName(system.getId(), oldModuleName);
 			if(module==null)
 				return new ErrorMessage(306042);
+			module = new Module(module);
 			module.setName(newModuleName);
 			moduleDAO.update(module);
 			return new ModuleMessage(module);

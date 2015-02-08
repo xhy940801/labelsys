@@ -53,6 +53,7 @@ public class SystemManagerDefaultImpl implements SystemManager{
 			System system = systemDAO.getById(systemId);
 			if(system==null)
 				return new ErrorMessage(305020);
+			system = new System(system);
 			system.setName(newSystemName);
 			systemDAO.update(system);
 			return new SystemMessage(system);
@@ -71,6 +72,7 @@ public class SystemManagerDefaultImpl implements SystemManager{
 			System system = systemDAO.getByName(oldSystemName);
 			if(system==null)
 				return new ErrorMessage(305030);
+			system = new System(system);
 			system.setName(newSystemName);
 			systemDAO.update(system);
 			return new SystemMessage(system);

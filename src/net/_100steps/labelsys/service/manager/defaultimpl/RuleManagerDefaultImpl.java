@@ -95,6 +95,7 @@ public class RuleManagerDefaultImpl implements RuleManager
 			Rule rule = ruleDAO.getById(id);
 			if(rule == null)
 				return new ErrorMessage(304031);
+			rule = new Rule(rule);
 			if(operationId != null)
 			{
 				Operation operation = operationDAO.getById(operationId);
@@ -135,6 +136,7 @@ public class RuleManagerDefaultImpl implements RuleManager
 			Rule rule = ruleDAO.getById(id);
 			if(rule == null)
 				return new ErrorMessage(304041);
+			rule = new Rule(rule);
 			if(systemName != null && moduleName != null && operationName != null)
 			{
 				System system = systemDAO.getByName(systemName);
