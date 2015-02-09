@@ -7,6 +7,10 @@ import net._100steps.labelsys.service.model.Entity;
 import net._100steps.labelsys.service.util.commontree.CommonTree;
 
 public class EntityMessage extends AbstractMessage{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private List<Entity> entities;
 

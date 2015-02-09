@@ -1,5 +1,7 @@
 package net._100steps.labelsys.service.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,9 +10,13 @@ import javax.persistence.Table;
 
 @javax.persistence.Entity
 @Table(name="entities")
-public class Entity
+public class Entity implements Serializable
 {
-
+	/**
+	 * version 1.0
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private int id;
 	private int moduleId;
 	private int foreignKey;

@@ -9,6 +9,11 @@ import net._100steps.labelsys.service.util.commontree.CommonTree;
 
 public class ModuleMessage extends AbstractMessage{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private List<Module> modules;
 	public ModuleMessage(Module module) {
 		super(0);

@@ -4,8 +4,13 @@ import net._100steps.labelsys.service.message.Message;
 
 public abstract class AbstractMessage implements Message
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected final int msgCode;
-	
+
 	protected AbstractMessage(int msgCode)
 	{
 		this.msgCode = msgCode;
@@ -16,7 +21,7 @@ public abstract class AbstractMessage implements Message
 	{
 		return msgCode;
 	}
-	
+
 	@Override
 	public String toString()
 	{

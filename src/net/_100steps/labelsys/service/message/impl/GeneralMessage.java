@@ -6,6 +6,11 @@ import net._100steps.labelsys.service.util.commontree.GeneralNode;
 
 public class GeneralMessage extends AbstractMessage
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final Object msg;
 	
 	public GeneralMessage(int msgCode, Object msg)

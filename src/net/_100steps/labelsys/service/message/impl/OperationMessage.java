@@ -5,6 +5,11 @@ import net._100steps.labelsys.service.util.commontree.CommonTree;
 
 public class OperationMessage extends AbstractMessage
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final Operation operation;
 	
 	public OperationMessage(Operation operation)

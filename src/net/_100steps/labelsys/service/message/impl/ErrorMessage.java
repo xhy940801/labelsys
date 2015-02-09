@@ -6,6 +6,11 @@ import net._100steps.labelsys.service.util.commontree.GeneralNode;
 
 public class ErrorMessage extends AbstractMessage
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final Exception exception;
 
 	public ErrorMessage(int errorCode)

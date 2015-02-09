@@ -1,8 +1,10 @@
 package net._100steps.labelsys.service.message;
 
+import java.io.Serializable;
+
 import net._100steps.labelsys.service.util.commontree.CommonTree;
 
-public interface Message
+public interface Message extends Serializable
 {
 	/**
 	 * 获取消息码

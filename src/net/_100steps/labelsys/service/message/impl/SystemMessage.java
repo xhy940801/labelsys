@@ -7,7 +7,11 @@ import net._100steps.labelsys.service.model.System;
 import net._100steps.labelsys.service.util.commontree.CommonTree;
 
 public class SystemMessage extends AbstractMessage {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private List<System> systems;
 	public SystemMessage(System system) {
 		super(0);

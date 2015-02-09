@@ -2,6 +2,7 @@ package net._100steps.labelsys.service.model;
 
 // Generated 2015-2-1 23:54:58 by Hibernate Tools 3.4.0.CR1
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,8 +16,12 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "rules")
-public class Rule
+public class Rule implements Serializable
 {
+	/**
+	 * version 1.0
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private int id;
 	private int operationId;
