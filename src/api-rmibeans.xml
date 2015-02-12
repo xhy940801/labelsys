@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean id="entityManagerRO"
+		class="net._100steps.labelsys.service.api.rmi.defaultimpl.EntityManagerRODefaultImpl">
+		<property name="entityManager" ref="entityManager"></property>
+	</bean>
+	
+	<bean id="labelManagerRO"
+		class="net._100steps.labelsys.service.api.rmi.defaultimpl.LabelManagerRODefaultImpl">
+		<property name="labelManager" ref="labelManager"></property>
+	</bean>
+	
+	<bean id="moduleManagerRO"
+		class="net._100steps.labelsys.service.api.rmi.defaultimpl.ModuleManagerRODefaultImpl">
+		<property name="moduleManager" ref="moduleManager"></property>
+	</bean>
+	
+	<bean id="operationManagerRO"
+		class="net._100steps.labelsys.service.api.rmi.defaultimpl.OperationManagerRODefaultImpl">
+		<property name="operationManager" ref="operationManager"></property>
+	</bean>
+	
+	<bean id="ruleManagerRO"
+		class="net._100steps.labelsys.service.api.rmi.defaultimpl.RuleManagerRODefaultImpl">
+		<property name="ruleManager" ref="ruleManager"></property>
+	</bean>
+
+	<bean id="systemManagerRO"
+		class="net._100steps.labelsys.service.api.rmi.defaultimpl.SystemManagerRODefaultImpl">
+		<property name="systemManager" ref="systemManager"></property>
+	</bean>
+	
+	<bean id="api-rmiPort"
+		class="java.lang.Integer">
+		<constructor-arg index="0" value="8199"></constructor-arg>
+	</bean>
+	
+	<bean id="api-rmiHost"
+		class="java.lang.String">
+		<constructor-arg index="0" value="//localhost"></constructor-arg>
+	</bean>
+
+</beans>

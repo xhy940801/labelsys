@@ -18,7 +18,8 @@
 			classpath:applicationContext.xml,
 			classpath:daobeans.xml,
 			classpath:managerbeans.xml,
-			classpath:database.xml
+			classpath:database.xml,
+			classpath:api-*beans.xml
 		</param-value>
 	</context-param>
 	<listener>
