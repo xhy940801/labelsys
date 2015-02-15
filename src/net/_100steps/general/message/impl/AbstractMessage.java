@@ -1,6 +1,6 @@
-package net._100steps.labelsys.service.message.impl;
+package net._100steps.general.message.impl;
 
-import net._100steps.labelsys.service.message.Message;
+import net._100steps.general.message.Message;
 
 public abstract class AbstractMessage implements Message
 {

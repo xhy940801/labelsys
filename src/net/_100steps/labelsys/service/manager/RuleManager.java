@@ -1,6 +1,6 @@
 package net._100steps.labelsys.service.manager;
 
-import net._100steps.labelsys.service.message.Message;
+import net._100steps.general.message.Message;
 
 public interface RuleManager
 {

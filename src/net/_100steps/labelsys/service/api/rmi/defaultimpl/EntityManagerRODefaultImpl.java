@@ -4,9 +4,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+import net._100steps.general.message.Message;
 import net._100steps.labelsys.service.api.rmi.EntityManagerRO;
 import net._100steps.labelsys.service.manager.EntityManager;
-import net._100steps.labelsys.service.message.Message;
 
 public class EntityManagerRODefaultImpl extends UnicastRemoteObject implements
 		EntityManagerRO

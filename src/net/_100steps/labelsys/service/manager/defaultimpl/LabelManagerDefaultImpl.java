@@ -1,14 +1,14 @@
 package net._100steps.labelsys.service.manager.defaultimpl;
 
+import net._100steps.general.message.Message;
+import net._100steps.general.message.impl.ErrorMessage;
+import net._100steps.general.message.impl.GeneralMessage;
+import net._100steps.general.message.impl.LabelMessage;
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.LabelDAO;
 import net._100steps.labelsys.service.dao.ModuleDAO;
 import net._100steps.labelsys.service.dao.SystemDAO;
 import net._100steps.labelsys.service.manager.LabelManager;
-import net._100steps.labelsys.service.message.Message;
-import net._100steps.labelsys.service.message.impl.ErrorMessage;
-import net._100steps.labelsys.service.message.impl.GeneralMessage;
-import net._100steps.labelsys.service.message.impl.LabelMessage;
 import net._100steps.labelsys.service.model.Label;
 import net._100steps.labelsys.service.model.Module;
 import net._100steps.labelsys.service.model.System;

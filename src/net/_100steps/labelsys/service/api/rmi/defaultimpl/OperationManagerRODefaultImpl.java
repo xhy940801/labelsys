@@ -3,12 +3,12 @@ package net._100steps.labelsys.service.api.rmi.defaultimpl;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import net._100steps.general.message.Message;
 import net._100steps.labelsys.service.api.rmi.OperationManagerRO;
 import net._100steps.labelsys.service.entity.EntityInfo;
 import net._100steps.labelsys.service.entity.LabelInfo;
 import net._100steps.labelsys.service.entity.OperationInfo;
 import net._100steps.labelsys.service.manager.OperationManager;
-import net._100steps.labelsys.service.message.Message;
 
 public class OperationManagerRODefaultImpl extends UnicastRemoteObject
 		implements OperationManagerRO

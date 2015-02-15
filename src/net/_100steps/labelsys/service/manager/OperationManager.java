@@ -1,9 +1,9 @@
 package net._100steps.labelsys.service.manager;
 
+import net._100steps.general.message.Message;
 import net._100steps.labelsys.service.entity.EntityInfo;
 import net._100steps.labelsys.service.entity.LabelInfo;
 import net._100steps.labelsys.service.entity.OperationInfo;
-import net._100steps.labelsys.service.message.Message;
 
 public interface OperationManager
 {

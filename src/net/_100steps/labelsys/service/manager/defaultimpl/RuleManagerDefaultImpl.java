@@ -2,6 +2,9 @@ package net._100steps.labelsys.service.manager.defaultimpl;
 
 import java.util.Date;
 
+import net._100steps.general.message.Message;
+import net._100steps.general.message.impl.ErrorMessage;
+import net._100steps.general.message.impl.RuleMessage;
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.LabelDAO;
 import net._100steps.labelsys.service.dao.ModuleDAO;
@@ -9,9 +12,6 @@ import net._100steps.labelsys.service.dao.OperationDAO;
 import net._100steps.labelsys.service.dao.RuleDAO;
 import net._100steps.labelsys.service.dao.SystemDAO;
 import net._100steps.labelsys.service.manager.RuleManager;
-import net._100steps.labelsys.service.message.Message;
-import net._100steps.labelsys.service.message.impl.ErrorMessage;
-import net._100steps.labelsys.service.message.impl.RuleMessage;
 import net._100steps.labelsys.service.model.Module;
 import net._100steps.labelsys.service.model.Operation;
 import net._100steps.labelsys.service.model.Rule;

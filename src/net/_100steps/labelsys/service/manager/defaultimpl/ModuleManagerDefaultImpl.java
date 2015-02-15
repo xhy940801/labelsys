@@ -6,8 +6,12 @@ import java.util.List;
 
 
 
+
 import javax.transaction.Transactional;
 
+import net._100steps.general.message.Message;
+import net._100steps.general.message.impl.ErrorMessage;
+import net._100steps.general.message.impl.ModuleMessage;
 import net._100steps.labelsys.service.dao.DAOException;
 import net._100steps.labelsys.service.dao.EntityDAO;
 import net._100steps.labelsys.service.dao.LabelDAO;
@@ -16,9 +20,6 @@ import net._100steps.labelsys.service.dao.OperationDAO;
 import net._100steps.labelsys.service.dao.RuleDAO;
 import net._100steps.labelsys.service.dao.SystemDAO;
 import net._100steps.labelsys.service.manager.ModuleManager;
-import net._100steps.labelsys.service.message.Message;
-import net._100steps.labelsys.service.message.impl.ErrorMessage;
-import net._100steps.labelsys.service.message.impl.ModuleMessage;
 import net._100steps.labelsys.service.model.Module;
 import net._100steps.labelsys.service.model.System;
 

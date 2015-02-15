@@ -3,7 +3,7 @@ package net._100steps.labelsys.service.api.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import net._100steps.labelsys.service.message.Message;
+import net._100steps.general.message.Message;
 
 public interface RuleManagerRO extends Remote
 {

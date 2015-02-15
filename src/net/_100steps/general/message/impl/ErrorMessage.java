@@ -1,8 +1,8 @@
-package net._100steps.labelsys.service.message.impl;
+package net._100steps.general.message.impl;
 
-import net._100steps.labelsys.service.util.commontree.CommonTree;
-import net._100steps.labelsys.service.util.commontree.GeneralCommonTree;
-import net._100steps.labelsys.service.util.commontree.GeneralNode;
+import net._100steps.general.util.commontree.CommonTree;
+import net._100steps.general.util.commontree.GeneralCommonTree;
+import net._100steps.general.util.commontree.GeneralNode;
 
 public class ErrorMessage extends AbstractMessage
 {

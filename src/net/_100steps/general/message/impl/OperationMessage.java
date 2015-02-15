@@ -1,7 +1,7 @@
-package net._100steps.labelsys.service.message.impl;
+package net._100steps.general.message.impl;
 
+import net._100steps.general.util.commontree.CommonTree;
 import net._100steps.labelsys.service.model.Operation;
-import net._100steps.labelsys.service.util.commontree.CommonTree;
 
 public class OperationMessage extends AbstractMessage
 {
